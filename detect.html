@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Detection - JobDetect</title>
+    <link rel="stylesheet" href="../services/home.css" />
+    <link rel="stylesheet" href="detect.css" />
+    <style>
+      /* ========================================
+         FR7: Report Modal Styles
+      ======================================== */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 4000;
+        padding: 20px;
+        animation: fadeIn 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-box {
+        background: white;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 100%;
+        padding: 40px;
+        position: relative;
+        animation: slideUpBounce 0.4s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-box h3 {
+        color: #2d3e87;
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .modal-box p.modal-subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: #f5f5f5;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-close:hover {
+        background: #dc2626;
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      .modal-form-group {
+        margin-bottom: 20px;
+      }
+
+      .modal-form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .modal-form-group select,
+      .modal-form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: "Segoe UI", sans-serif;
+        transition: border-color 0.3s;
+        outline: none;
+      }
+
+      .modal-form-group select:focus,
+      .modal-form-group textarea:focus {
+        border-color: #2d3e87;
+        box-shadow: 0 0 0 3px rgba(45, 62, 135, 0.1);
+      }
+
+      .modal-form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .modal-char-count {
+        font-size: 12px;
+        color: #999;
+        text-align: right;
+        margin-top: 4px;
+      }
+
+      .modal-error {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .modal-error.show {
+        display: block;
+      }
+
+      .modal-success {
+        background: #dcfce7;
+        color: #16a34a;
+        padding: 16px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        margin-bottom: 16px;
+      }
+
+      .modal-success.show {
+        display: block;
+      }
+
+      .modal-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .modal-buttons button {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-cancel {
+        background: #f5f5f5;
+        color: #333;
+      }
+
+      .btn-cancel:hover {
+        background: #e5e5e5;
+      }
+
+      .btn-submit-report {
+        background: #dc2626;
+        color: white;
+      }
+
+      .btn-submit-report:hover:not(:disabled) {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      }
+
+      .btn-submit-report:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUpBounce {
+        from {
+          opacity: 0;
+          transform: translateY(50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+      <div class="container">
+        <div class="nav-brand">
+          <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+              <path
+                d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+                stroke="#2D3E87"
+                stroke-width="2"
+                fill="none"
+              />
+              <circle cx="20" cy="20" r="3" fill="#F47458" />
+            </svg>
+          </div>
+          <h1>JobDetect</h1>
+        </div>
+        <nav class="nav-menu">
+          <span class="user-info"
+            >Welcome, <strong id="userName">User</strong></span
+          >
+          <a href="history.html">History</a>
+          <!-- FR11: Feedback link added to navbar -->
+          <a href="feedback.html">Feedback</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div id="progressBar" class="progress-bar" style="display: none">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+      <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h2>Verify Job Posting</h2>
+          <p>
+            Choose a detection method to analyze the job posting for fraud
+            indicators
+          </p>
+        </div>
+
+        <!-- Detection Tabs -->
+        <div class="detection-tabs">
+          <button
+            class="tab-btn active"
+            onclick="switchTab('text')"
+            id="textTab"
+            aria-label="Switch to text detection"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              ></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <line x1="10" y1="9" x2="8" y2="9"></line>
+            </svg>
+            Text Detection
+          </button>
+          <button
+            class="tab-btn"
+            onclick="switchTab('image')"
+            id="imageTab"
+            aria-label="Switch to image detection"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            Image Detection
+          </button>
+          <button
+            class="tab-btn"
+            onclick="switchTab('url')"
+            id="urlTab"
+            aria-label="Switch to URL verification"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+              ></path>
+              <path
+                d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+              ></path>
+            </svg>
+            URL Verification
+          </button>
+        </div>
+
+        <!-- Detection Content Cards -->
+        <div class="detection-content">
+          <!-- FR2: Text Detection -->
+          <div id="textContent" class="content-card active">
+            <div class="card-header">
+              <h3>
+                Text-Based Job Detection
+                <span
+                  class="info-tooltip"
+                  data-tooltip="We use AI to analyze job descriptions for fraud patterns"
+                  >ℹ️</span
+                >
+              </h3>
+              <p>Paste job description for AI-powered NLP analysis</p>
+            </div>
+            <div class="card-body">
+              <div class="input-section">
+                <label for="jobText">Job Description</label>
+                <textarea
+                  id="jobText"
+                  placeholder="Paste the complete job posting here (minimum 50 characters, maximum 5000 characters)...&#10;&#10;Example:&#10;We are hiring immediately! Work from home and earn $5000/week. No experience needed. Just send $200 for training materials..."
+                  maxlength="5000"
+                  aria-describedby="textValidation"
+                ></textarea>
+                <div class="input-footer">
+                  <span class="char-count">
+                    <span id="textCharCount">0</span> / 5000 characters
+                  </span>
+                  <span class="validation-msg" id="textValidation"></span>
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button class="btn-secondary" onclick="clearText()">
+                  Clear
+                </button>
+                <button
+                  class="btn-primary"
+                  onclick="analyzeText()"
+                  id="analyzeTextBtn"
+                  aria-label="Analyze job posting text"
+                  disabled
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                  </svg>
+                  Analyze Job Posting
+                </button>
+              </div>
+
+              <div class="info-box">
+                <strong>📋 Text Detection Process:</strong>
+                <ul>
+                  <li>
+                    Text cleaning and preprocessing (lowercase, remove URLs)
+                  </li>
+                  <li>Tokenization using NLTK</li>
+                  <li>Stopword removal</li>
+                  <li>TF-IDF feature extraction</li>
+                  <li>ML model classification (97%+ accuracy)</li>
+                  <li>Suspicious phrase highlighting</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- FR3: Image Detection -->
+          <div id="imageContent" class="content-card">
+            <div class="card-header">
+              <h3>
+                Image-Based Job Detection
+                <span
+                  class="info-tooltip"
+                  data-tooltip="Upload screenshots and we'll extract text using OCR"
+                  >ℹ️</span
+                >
+              </h3>
+              <p>Upload job posting screenshot for OCR text extraction</p>
+            </div>
+            <div class="card-body">
+              <div class="upload-section">
+                <div
+                  class="upload-zone"
+                  id="uploadZone"
+                  onclick="document.getElementById('imageInput').click()"
+                >
+                  <input
+                    type="file"
+                    id="imageInput"
+                    accept=".jpg,.jpeg,.png"
+                    hidden
+                    onchange="handleImageUpload(event)"
+                    aria-label="Upload job posting image"
+                  />
+                  <svg
+                    width="64"
+                    height="64"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#2D3E87"
+                    stroke-width="2"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <h4>Click to upload or drag and drop</h4>
+                  <p>JPG, PNG, or JPEG (Max 5MB)</p>
+                  <p class="formats">
+                    ✓ Screenshots ✓ Photos ✓ Social media posts
+                  </p>
+                </div>
+
+                <div
+                  id="imagePreview"
+                  class="image-preview"
+                  style="display: none"
+                >
+                  <img id="previewImg" alt="Job posting preview" />
+                  <div class="preview-info">
+                    <p><strong>File:</strong> <span id="fileName"></span></p>
+                    <p><strong>Size:</strong> <span id="fileSize"></span></p>
+                    <button class="btn-remove" onclick="removeImage()">
+                      Remove Image
+                    </button>
+                  </div>
+                </div>
+
+                <span class="validation-msg" id="imageValidation"></span>
+              </div>
+
+              <button
+                class="btn-primary full-width"
+                onclick="analyzeImage()"
+                id="analyzeImageBtn"
+                aria-label="Analyze job posting image"
+                disabled
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                Analyze Image
+              </button>
+
+              <div class="info-box">
+                <strong>🖼️ Image Detection Process:</strong>
+                <ul>
+                  <li>Image preprocessing (grayscale conversion)</li>
+                  <li>Noise reduction using OpenCV</li>
+                  <li>Text extraction using Tesseract OCR</li>
+                  <li>OCR confidence calculation</li>
+                  <li>Extracted text passed to NLP pipeline</li>
+                  <li>Image quality feedback</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- FR4: URL Verification -->
+          <div id="urlContent" class="content-card">
+            <div class="card-header">
+              <h3>
+                URL/Domain Verification
+                <span
+                  class="info-tooltip"
+                  data-tooltip="We check domain age, SSL certificates, and blacklist status"
+                  >ℹ️</span
+                >
+              </h3>
+              <p>Enter job posting URL for domain authentication</p>
+            </div>
+            <div class="card-body">
+              <div class="input-section">
+                <label for="jobUrl">Job Posting URL</label>
+                <input
+                  type="url"
+                  id="jobUrl"
+                  placeholder="https://example.com/job-posting"
+                  onkeyup="validateUrl()"
+                  aria-describedby="urlValidation"
+                />
+                <span class="validation-msg" id="urlValidation"></span>
+              </div>
+
+              <button
+                class="btn-primary full-width"
+                onclick="verifyUrl()"
+                id="verifyUrlBtn"
+                aria-label="Verify job posting URL"
+                disabled
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Verify Domain
+              </button>
+
+              <div class="info-box">
+                <strong>🔗 URL Verification Process:</strong>
+                <ul>
+                  <li>URL parsing and domain extraction</li>
+                  <li>WHOIS API call for registration details</li>
+                  <li>Domain age calculation (min 30 days threshold)</li>
+                  <li>SSL certificate validation</li>
+                  <li>Blacklist database query</li>
+                  <li>Trust score calculation (0-100%)</li>
+                </ul>
+              </div>
+
+              <div class="verification-checklist">
+                <h4>🛡️ What We Check:</h4>
+                <div class="checklist-grid">
+                  <div class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>Domain Age</span>
+                  </div>
+                  <div class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>SSL Certificate</span>
+                  </div>
+                  <div class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>Blacklist Status</span>
+                  </div>
+                  <div class="check-item">
+                    <span class="check-icon">✓</span>
+                    <span>WHOIS Data</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="#E8F0FE" />
+            <path
+              d="M70 90 Q100 70 130 90"
+              stroke="#2D3E87"
+              stroke-width="3"
+              fill="none"
+            />
+            <circle cx="80" cy="80" r="8" fill="#2D3E87" />
+            <circle cx="120" cy="80" r="8" fill="#2D3E87" />
+          </svg>
+          <h3>Ready to Detect Fake Jobs!</h3>
+          <p>Start by choosing a detection method above</p>
+        </div>
+
+        <!-- Results Section (FR5) -->
+        <div id="resultsSection" class="results-section" style="display: none">
+          <div class="results-card">
+            <button
+              class="close-results"
+              onclick="closeResults()"
+              aria-label="Close results"
+            >
+              ×
+            </button>
+
+            <div class="result-header">
+              <div class="risk-circle" id="riskCircle">
+                <div class="risk-percentage" id="riskPercentage">0%</div>
+                <div class="risk-label" id="riskLabel">Risk Level</div>
+              </div>
+              <h3 id="resultTitle">Analysis Complete</h3>
+            </div>
+
+            <div class="result-body">
+              <div class="result-info">
+                <strong>Detection Method:</strong>
+                <span id="detectionMethod">Text Analysis</span>
+              </div>
+
+              <div class="trust-meter-container">
+                <label>Trust Score:</label>
+                <div class="trust-meter">
+                  <div
+                    class="meter-fill"
+                    id="trustMeterFill"
+                    style="width: 0%"
+                  ></div>
+                  <span class="meter-value" id="trustMeterValue">0%</span>
+                </div>
+              </div>
+
+              <div class="risk-badge" id="riskBadge">
+                <span class="badge-text">Medium Risk</span>
+              </div>
+
+              <div class="indicators-section">
+                <h4>🚨 Detected Issues:</h4>
+                <ul id="suspiciousIndicators"></ul>
+              </div>
+
+              <div class="reasons-section">
+                <h4>📊 Why This Result?</h4>
+                <div id="detailedReasons"></div>
+              </div>
+
+              <div class="recommendations-section">
+                <h4>💡 Safety Recommendations:</h4>
+                <ul id="safetyRecommendations"></ul>
+              </div>
+
+              <!-- Action Buttons — ORIGINAL, NOT CHANGED -->
+              <div class="result-actions">
+                <button class="btn-secondary" onclick="closeResults()">
+                  New Detection
+                </button>
+                <button class="btn-outline" onclick="saveToHistory()">
+                  📥 Save to History
+                </button>
+                <button class="btn-danger" onclick="openReportModal()">
+                  🚨 Report This Job
+                </button>
+              </div>
+
+              <!-- =============================================
+                   FR11: NEW — Inline Feedback Section
+                   Added AFTER action buttons, nothing else changed
+              ============================================== -->
+              <div class="inline-feedback-section">
+                <h4>📊 Was this detection accurate?</h4>
+                <p class="inline-feedback-subtitle">
+                  Your rating helps improve our AI model accuracy
+                </p>
+
+                <!-- 👍 / 👎 Rating Buttons (mandatory) -->
+                <div class="inline-rating-buttons" id="inlineRatingButtons">
+                  <button
+                    class="inline-rating-btn thumbs-up"
+                    onclick="selectInlineRating('thumbs_up')"
+                    id="inlineThumbsUp"
+                  >
+                    👍 Yes, Accurate
+                  </button>
+                  <button
+                    class="inline-rating-btn thumbs-down"
+                    onclick="selectInlineRating('thumbs_down')"
+                    id="inlineThumbsDown"
+                  >
+                    👎 No, Inaccurate
+                  </button>
+                </div>
+
+                <!-- Rating error -->
+                <div class="inline-rating-error" id="inlineRatingError">
+                  ⚠️ Please select a rating first
+                </div>
+
+                <!-- Optional comment (max 200 chars) -->
+                <div class="inline-comment-wrap" id="inlineCommentWrap">
+                  <label>
+                    Comment
+                    <span style="color: #999; font-weight: 400">
+                      (optional, max 200 characters)
+                    </span>
+                  </label>
+                  <textarea
+                    id="inlineFeedbackComment"
+                    placeholder="Tell us more about this detection result..."
+                    maxlength="200"
+                    oninput="updateInlineCharCount()"
+                  ></textarea>
+                  <div class="inline-char-count">
+                    <span id="inlineCharCount">0</span> / 200 characters
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                  class="btn-inline-submit"
+                  onclick="submitInlineFeedback()"
+                  id="inlineFeedbackSubmitBtn"
+                >
+                  📤 Submit Feedback
+                </button>
+
+                <!-- Success message shown after submit -->
+                <div class="inline-feedback-success" id="inlineFeedbackSuccess">
+                  <h5>✅ Thank you for your feedback!</h5>
+                  <p id="inlineSatisfactionMsg"></p>
+                  <p id="inlineImprovementMsg"></p>
+                  <a href="feedback.html" class="feedback-page-link">
+                    📊 View full feedback dashboard →
+                  </a>
+                </div>
+              </div>
+              <!-- end FR11 inline feedback -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         FR7: Report Job Modal — ORIGINAL, NOT CHANGED
+    ======================================== -->
+    <div id="reportModal" class="modal-overlay" style="display: none">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeReportModal()">×</button>
+        <h3>🚨 Report Fake Job</h3>
+        <p class="modal-subtitle">
+          Help the community by reporting this suspicious job posting
+        </p>
+        <div id="reportSuccess" class="modal-success">
+          ✅ Report submitted successfully! Thank you for helping the community.
+        </div>
+        <div id="reportForm">
+          <div class="modal-form-group">
+            <label for="reportReason">Reason for Reporting *</label>
+            <select id="reportReason">
+              <option value="">-- Select a reason --</option>
+              <option value="Payment Required">
+                💰 Payment Required (Asking for money)
+              </option>
+              <option value="Personal Information Theft">
+                🔐 Personal Information Theft
+              </option>
+              <option value="Fake Company">
+                🏢 Fake Company / Does not exist
+              </option>
+              <option value="Too Good To Be True">
+                ⚠️ Too Good To Be True (Unrealistic salary)
+              </option>
+              <option value="Suspicious URL">
+                🔗 Suspicious URL / Website
+              </option>
+              <option value="Duplicate Posting">
+                📋 Duplicate / Spam Posting
+              </option>
+              <option value="Other">📝 Other</option>
+            </select>
+            <div id="reasonError" class="modal-error">
+              Please select a reason
+            </div>
+          </div>
+          <div class="modal-form-group">
+            <label for="reportDescription">Description *</label>
+            <textarea
+              id="reportDescription"
+              placeholder="Describe why you think this is a fake job... (minimum 10 characters)"
+              maxlength="500"
+              oninput="updateReportCharCount()"
+            ></textarea>
+            <div class="modal-char-count">
+              <span id="reportCharCount">0</span> / 500 characters
+            </div>
+            <div id="descriptionError" class="modal-error">
+              Description must be at least 10 characters
+            </div>
+          </div>
+          <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeReportModal()">
+              Cancel
+            </button>
+            <button
+              class="btn-submit-report"
+              id="submitReportBtn"
+              onclick="submitReport()"
+            >
+              🚨 Submit Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none">
+      <div class="spinner"></div>
+      <p id="loadingText">Analyzing job posting...</p>
+      <div class="loading-steps" id="loadingSteps">
+        <div class="step">✓ Preprocessing text...</div>
+      </div>
+    </div>
+
+    <script src="../services/api.js"></script>
+    <script src="detect.js"></script>
+  </body>
+</html>

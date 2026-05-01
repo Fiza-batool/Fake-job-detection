@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback & Model Improvement - JobDetect</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f4ff;
+        color: #1a1a2e;
+      }
+
+      /* ── Navbar ── */
+      .navbar {
+        background: white;
+        padding: 16px 0;
+        box-shadow: 0 2px 20px rgba(45, 62, 135, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+      .nav-brand h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-menu a:hover {
+        color: #2d3e87;
+      }
+      .nav-menu .active-link {
+        color: #2d3e87;
+        font-weight: 700;
+      }
+      .btn-outline {
+        border: 2px solid #2d3e87;
+        color: #2d3e87 !important;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600 !important;
+        transition: all 0.3s !important;
+      }
+      .btn-outline:hover {
+        background: #2d3e87;
+        color: white !important;
+      }
+      .user-info {
+        color: #555;
+        font-size: 14px;
+      }
+
+      /* ── Hero ── */
+      .feedback-hero {
+        background: linear-gradient(135deg, #2d3e87 0%, #1a2560 100%);
+        padding: 50px 24px;
+        text-align: center;
+        color: white;
+      }
+      .feedback-hero h2 {
+        font-size: 38px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .feedback-hero p {
+        font-size: 17px;
+        opacity: 0.85;
+      }
+
+      /* ── Main Container ── */
+      .main-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px;
+      }
+
+      /* ── Stats Cards ── */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 36px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+      }
+      .stat-card .stat-number {
+        font-size: 34px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .stat-card .stat-number.green {
+        color: #16a34a;
+      }
+      .stat-card .stat-number.red {
+        color: #dc2626;
+      }
+      .stat-card .stat-number.orange {
+        color: #ea580c;
+      }
+      .stat-card .stat-label {
+        color: #666;
+        font-size: 13px;
+        margin-top: 6px;
+      }
+
+      /* ── Section Title ── */
+      .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2d3e87;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* ── Submit Feedback Card ── */
+      .submit-card {
+        background: white;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+        margin-bottom: 32px;
+      }
+
+      .submit-card p.subtitle {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+
+      /* Rating Buttons */
+      .rating-section {
+        margin-bottom: 24px;
+      }
+      .rating-section label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+      .rating-section label span {
+        color: #dc2626;
+      }
+      .rating-buttons {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .rating-btn {
+        padding: 14px 32px;
+        border: 2px solid #e0e7ff;
+        border-radius: 50px;
+        background: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .rating-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .rating-btn.thumbs-up.selected {
+        background: #dcfce7;
+        border-color: #16a34a;
+        color: #166534;
+      }
+      .rating-btn.thumbs-down.selected {
+        background: #fee2e2;
+        border-color: #dc2626;
+        color: #991b1b;
+      }
+
+      /* Detection Method */
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .form-group label span {
+        color: #dc2626;
+      }
+      .form-group select,
+      .form-group textarea,
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: "Segoe UI", sans-serif;
+        outline: none;
+        transition: border-color 0.3s;
+        background: white;
+      }
+      .form-group select:focus,
+      .form-group textarea:focus,
+      .form-group input:focus {
+        border-color: #2d3e87;
+        box-shadow: 0 0 0 3px rgba(45, 62, 135, 0.08);
+      }
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      .char-count {
+        text-align: right;
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+      }
+
+      /* Validation errors */
+      .field-error {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+      }
+      .field-error.show {
+        display: block;
+      }
+
+      /* Submit Button */
+      .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 8px;
+      }
+      .btn-submit:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(45, 62, 135, 0.3);
+      }
+      .btn-submit:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Success Message */
+      .success-box {
+        background: #dcfce7;
+        border: 2px solid #16a34a;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        display: none;
+        margin-top: 20px;
+      }
+      .success-box.show {
+        display: block;
+      }
+      .success-box h4 {
+        color: #166534;
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      .success-box p {
+        color: #166534;
+        font-size: 14px;
+        margin: 4px 0;
+      }
+      .success-box .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .success-box .metric-item {
+        background: white;
+        border-radius: 10px;
+        padding: 14px;
+        border: 1px solid #bbf7d0;
+      }
+      .success-box .metric-item .metric-value {
+        font-size: 24px;
+        font-weight: 800;
+        color: #166534;
+      }
+      .success-box .metric-item .metric-label {
+        font-size: 12px;
+        color: #166534;
+        margin-top: 4px;
+      }
+
+      /* ── Feedback History Table ── */
+      .history-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.08);
+        overflow: hidden;
+        border: 1px solid #e8f0fe;
+        margin-bottom: 32px;
+      }
+      .history-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .history-card-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2d3e87;
+      }
+      .btn-export {
+        padding: 10px 20px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-export:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead {
+        background: #2d3e87;
+        color: white;
+      }
+      thead th {
+        padding: 14px 20px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      tbody tr {
+        border-bottom: 1px solid #f0f4ff;
+        transition: background 0.2s;
+      }
+      tbody tr:hover {
+        background: #f8f9ff;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody td {
+        padding: 14px 20px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .rating-badge {
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        display: inline-block;
+      }
+      .rating-positive {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .rating-negative {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .method-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #e0e7ff;
+        color: #2d3e87;
+      }
+
+      .comment-text {
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #555;
+        font-style: italic;
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #999;
+      }
+      .empty-state h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #2d3e87;
+      }
+
+      /* Loading */
+      .loading-state {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      /* Satisfaction Bar */
+      .satisfaction-section {
+        background: white;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+        margin-bottom: 32px;
+      }
+      .satisfaction-bar-wrap {
+        margin-top: 16px;
+      }
+      .satisfaction-bar-wrap label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .satisfaction-bar {
+        height: 16px;
+        background: #e0e7ff;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .satisfaction-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #16a34a, #22c55e);
+        border-radius: 8px;
+        transition: width 1s ease;
+        width: 0%;
+      }
+      .improvement-box {
+        background: #f0f4ff;
+        border-left: 4px solid #2d3e87;
+        border-radius: 0 8px 8px 0;
+        padding: 14px 18px;
+        margin-top: 16px;
+        font-size: 14px;
+        color: #2d3e87;
+        font-weight: 600;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .feedback-hero h2 {
+          font-size: 26px;
+        }
+        .rating-buttons {
+          flex-direction: column;
+        }
+        table {
+          font-size: 12px;
+        }
+        thead th,
+        tbody td {
+          padding: 10px 12px;
+        }
+        .success-box .metrics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Navbar ── -->
+    <header class="navbar">
+      <div class="container">
+        <a href="home.html" class="nav-brand">
+          <svg class="logo" width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+            <path
+              d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+              stroke="#2D3E87"
+              stroke-width="2"
+              fill="none"
+            />
+            <circle cx="20" cy="20" r="3" fill="#F47458" />
+          </svg>
+          <h1>JobDetect</h1>
+        </a>
+        <nav class="nav-menu">
+          <span class="user-info"
+            >Welcome, <strong id="userName">User</strong></span
+          >
+          <a href="detect.html">Detect Jobs</a>
+          <a href="history.html">History</a>
+          <a href="faq.html">FAQ</a>
+          <a href="feedback.html" class="active-link">Feedback</a>
+          <a href="awareness.html">Awareness</a>
+          <a href="report.html">Report Job</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ── Hero ── -->
+    <div class="feedback-hero">
+      <h2>📊 Feedback & Model Improvement</h2>
+      <p>Rate detection results and help improve our AI model accuracy</p>
+    </div>
+
+    <!-- ── Main Content ── -->
+    <div class="main-container">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalFeedback">0</div>
+          <div class="stat-label">Total Feedback</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number green" id="positiveFeedback">0</div>
+          <div class="stat-label">👍 Accurate Results</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number red" id="negativeFeedback">0</div>
+          <div class="stat-label">👎 Inaccurate Results</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number orange" id="satisfactionRate">0%</div>
+          <div class="stat-label">User Satisfaction Rate</div>
+        </div>
+      </div>
+
+      <!-- Satisfaction Bar -->
+      <div class="satisfaction-section">
+        <div class="section-title">
+          📈 Model Accuracy Based on User Feedback
+        </div>
+        <div class="satisfaction-bar-wrap">
+          <label>
+            <span>User Satisfaction</span>
+            <span id="satisfactionLabel">0%</span>
+          </label>
+          <div class="satisfaction-bar">
+            <div class="satisfaction-fill" id="satisfactionFill"></div>
+          </div>
+        </div>
+        <div class="improvement-box" id="improvementBox">
+          💡 Submit feedback below to help improve our AI model accuracy.
+        </div>
+      </div>
+
+      <!-- Submit Feedback Card -->
+      <div class="submit-card">
+        <div class="section-title">✍️ Submit Your Feedback</div>
+        <p class="subtitle">
+          Your feedback is linked to detection results and helps retrain our ML
+          model for better accuracy.
+        </p>
+
+        <!-- Success Box (shown after submit) -->
+        <div class="success-box" id="successBox">
+          <h4>✅ Thank you for your feedback!</h4>
+          <p id="successMsg">
+            Your feedback has been saved and will help improve our detection
+            model.
+          </p>
+          <p id="improvementMsg" style="margin-top: 8px; font-weight: 600"></p>
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <div class="metric-value" id="metricTotal">0</div>
+              <div class="metric-label">Total Feedback</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-value" id="metricPositive">0</div>
+              <div class="metric-label">Positive Ratings</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-value" id="metricSatisfaction">0%</div>
+              <div class="metric-label">Satisfaction Rate</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <div id="feedbackForm">
+          <!-- 1. Rating (Mandatory) -->
+          <div class="rating-section">
+            <label>Was the detection result accurate? <span>*</span></label>
+            <div class="rating-buttons">
+              <button
+                class="rating-btn thumbs-up"
+                onclick="selectRating('thumbs_up')"
+                id="thumbsUpBtn"
+              >
+                👍 Yes, Accurate
+              </button>
+              <button
+                class="rating-btn thumbs-down"
+                onclick="selectRating('thumbs_down')"
+                id="thumbsDownBtn"
+              >
+                👎 No, Inaccurate
+              </button>
+            </div>
+            <div class="field-error" id="ratingError">
+              ⚠️ Please select a rating (required)
+            </div>
+          </div>
+
+          <!-- 2. Detection Method -->
+          <div class="form-group">
+            <label>Detection Method Used <span>*</span></label>
+            <select id="detectionMethod">
+              <option value="">-- Select method --</option>
+              <option value="Text Analysis (NLP)">
+                📄 Text Analysis (NLP)
+              </option>
+              <option value="Image Analysis (OCR + NLP)">
+                🖼️ Image Analysis (OCR + NLP)
+              </option>
+              <option value="URL/Domain Verification">
+                🔗 URL/Domain Verification
+              </option>
+            </select>
+            <div class="field-error" id="methodError">
+              ⚠️ Please select the detection method used
+            </div>
+          </div>
+
+          <!-- 3. Risk Score -->
+          <div class="form-group">
+            <label>Risk Score Shown (optional)</label>
+            <input
+              type="number"
+              id="riskScoreInput"
+              placeholder="e.g. 75 (enter 0-100)"
+              min="0"
+              max="100"
+            />
+          </div>
+
+          <!-- 4. Comment (optional, max 200 chars) -->
+          <div class="form-group">
+            <label>
+              Additional Comment
+              <span style="color: #999; font-weight: 400"
+                >(optional, max 200 characters)</span
+              >
+            </label>
+            <textarea
+              id="feedbackComment"
+              placeholder="Tell us why you think this result was accurate or inaccurate. Your comments help improve our AI model..."
+              maxlength="200"
+              oninput="updateCharCount()"
+            ></textarea>
+            <div class="char-count">
+              <span id="charCount">0</span> / 200 characters
+            </div>
+            <div class="field-error" id="commentError">
+              ⚠️ Comment must be less than 200 characters
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button class="btn-submit" onclick="submitFeedback()" id="submitBtn">
+            📤 Submit Feedback
+          </button>
+        </div>
+        <!-- end feedbackForm -->
+      </div>
+
+      <!-- Feedback History Table -->
+      <div class="history-card">
+        <div class="history-card-header">
+          <h3>📋 Feedback History</h3>
+          <button class="btn-export" onclick="exportFeedbackCSV()">
+            📥 Export CSV
+          </button>
+        </div>
+
+        <div class="loading-state" id="loadingState">
+          ⏳ Loading feedback...
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none">
+          <h4>📭 No feedback submitted yet</h4>
+          <p>Be the first to rate a detection result above!</p>
+        </div>
+
+        <table id="feedbackTable" style="display: none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Rating</th>
+              <th>Detection Method</th>
+              <th>Risk Score</th>
+              <th>Prediction</th>
+              <th>Comment</th>
+              <th>Date & Time</th>
+            </tr>
+          </thead>
+          <tbody id="feedbackTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- end main-container -->
+
+    <script src="../services/api.js"></script>
+    <script>
+      // ── State ──
+      let selectedRating = null;
+      let allFeedbackData = [];
+
+      // ── On Load ──
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        loadUserName();
+        loadFeedbackStats();
+        loadFeedbackHistory();
+      });
+
+      function checkAuth() {
+        if (!localStorage.getItem("token")) {
+          window.location.href = "Login.html";
+        }
+      }
+
+      function loadUserName() {
+        document.getElementById("userName").textContent =
+          localStorage.getItem("userName") || "User";
+      }
+
+      // ── Select Rating ──
+      function selectRating(rating) {
+        selectedRating = rating;
+        document.getElementById("thumbsUpBtn").classList.remove("selected");
+        document.getElementById("thumbsDownBtn").classList.remove("selected");
+        if (rating === "thumbs_up") {
+          document.getElementById("thumbsUpBtn").classList.add("selected");
+        } else {
+          document.getElementById("thumbsDownBtn").classList.add("selected");
+        }
+        document.getElementById("ratingError").classList.remove("show");
+      }
+
+      // ── Char Count ──
+      function updateCharCount() {
+        const val = document.getElementById("feedbackComment").value.length;
+        document.getElementById("charCount").textContent = val;
+      }
+
+      // ── Spam Check ──
+      function isSpam(comment) {
+        if (!comment) return false;
+        const recent = allFeedbackData.slice(-10);
+        return recent.some(
+          (f) => (f.comment || "").toLowerCase() === comment.toLowerCase(),
+        );
+      }
+
+      // ── Submit Feedback ──
+      async function submitFeedback() {
+        // Clear errors
+        document
+          .querySelectorAll(".field-error")
+          .forEach((el) => el.classList.remove("show"));
+
+        let hasError = false;
+
+        // Validation 1: Mandatory rating
+        if (!selectedRating) {
+          document.getElementById("ratingError").classList.add("show");
+          hasError = true;
+        }
+
+        // Validation 2: Detection method mandatory
+        const method = document.getElementById("detectionMethod").value;
+        if (!method) {
+          document.getElementById("methodError").classList.add("show");
+          hasError = true;
+        }
+
+        // Validation 3: Comment max 200 chars
+        const comment = document.getElementById("feedbackComment").value.trim();
+        if (comment.length > 200) {
+          document.getElementById("commentError").classList.add("show");
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Validation 4: Spam detection
+        if (isSpam(comment)) {
+          alert(
+            "⚠️ Duplicate feedback detected. Please provide unique feedback.",
+          );
+          return;
+        }
+
+        const riskScore =
+          parseInt(document.getElementById("riskScoreInput").value) || 0;
+
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+        try {
+          const response = await submitFeedbackAPI({
+            rating: selectedRating,
+            comment: comment,
+            detection_method: method,
+            risk_score: riskScore,
+            prediction: "Unknown",
+          });
+
+          if (response.success) {
+            // Hide form, show success
+            document.getElementById("feedbackForm").style.display = "none";
+            const metrics = response.accuracy_metrics;
+
+            document.getElementById("metricTotal").textContent =
+              metrics.total_feedback;
+            document.getElementById("metricPositive").textContent =
+              metrics.positive_ratings;
+            document.getElementById("metricSatisfaction").textContent =
+              metrics.user_satisfaction_rate + "%";
+            document.getElementById("improvementMsg").textContent =
+              "💡 " + response.model_improvement_suggestion;
+
+            document.getElementById("successBox").classList.add("show");
+
+            // Refresh stats and table
+            loadFeedbackStats();
+            loadFeedbackHistory();
+          } else {
+            alert(
+              "Error: " +
+                (response.error || "Feedback failed. Please try again."),
+            );
+            submitBtn.disabled = false;
+            submitBtn.textContent = "📤 Submit Feedback";
+          }
+        } catch (error) {
+          alert("Network error. Please check your connection.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "📤 Submit Feedback";
+        }
+      }
+
+      // ── Load Stats ──
+      async function loadFeedbackStats() {
+        try {
+          const res = await fetch("http://127.0.0.1:5000/job/feedback/stats");
+          const data = await res.json();
+
+          if (data.success) {
+            const total = data.total_feedback;
+            const positive = data.positive_ratings;
+            const negative = data.negative_ratings;
+            const satisfaction = data.satisfaction_rate;
+
+            document.getElementById("totalFeedback").textContent = total;
+            document.getElementById("positiveFeedback").textContent = positive;
+            document.getElementById("negativeFeedback").textContent = negative;
+            document.getElementById("satisfactionRate").textContent =
+              satisfaction + "%";
+            document.getElementById("satisfactionLabel").textContent =
+              satisfaction + "%";
+
+            // Animate bar
+            setTimeout(() => {
+              document.getElementById("satisfactionFill").style.width =
+                satisfaction + "%";
+            }, 300);
+
+            // Improvement suggestion
+            if (total > 0) {
+              if (satisfaction >= 80) {
+                document.getElementById("improvementBox").textContent =
+                  "✅ Excellent! Users are highly satisfied with detection accuracy. Model is performing well.";
+              } else if (satisfaction >= 50) {
+                document.getElementById("improvementBox").textContent =
+                  "⚠️ Moderate satisfaction. Some detection results need improvement. Retraining recommended.";
+              } else {
+                document.getElementById("improvementBox").textContent =
+                  "🔴 Low satisfaction rate. Model requires immediate retraining with updated datasets.";
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Stats load error:", error);
+        }
+      }
+
+      // ── Load History ──
+      async function loadFeedbackHistory() {
+        try {
+          const res = await fetch("http://127.0.0.1:5000/job/feedback/stats");
+          const data = await res.json();
+
+          document.getElementById("loadingState").style.display = "none";
+
+          if (data.success && data.feedback && data.feedback.length > 0) {
+            allFeedbackData = data.feedback;
+            renderTable(allFeedbackData);
+          } else {
+            document.getElementById("emptyState").style.display = "block";
+          }
+        } catch (error) {
+          document.getElementById("loadingState").style.display = "none";
+          document.getElementById("emptyState").style.display = "block";
+        }
+      }
+
+      // ── Render Table ──
+      function renderTable(feedbackList) {
+        const table = document.getElementById("feedbackTable");
+        const tbody = document.getElementById("feedbackTableBody");
+        const empty = document.getElementById("emptyState");
+
+        if (!feedbackList || feedbackList.length === 0) {
+          table.style.display = "none";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        table.style.display = "table";
+        tbody.innerHTML = "";
+
+        feedbackList.forEach((item, index) => {
+          const isPositive = item.rating === "thumbs_up";
+          const ratingBadge = isPositive
+            ? `<span class="rating-badge rating-positive">👍 Accurate</span>`
+            : `<span class="rating-badge rating-negative">👎 Inaccurate</span>`;
+
+          const comment = item.comment
+            ? `<div class="comment-text" title="${item.comment}">${item.comment}</div>`
+            : `<span style="color:#ccc;">—</span>`;
+
+          const date = item.submitted_at
+            ? new Date(item.submitted_at).toLocaleString()
+            : "—";
+
+          tbody.innerHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${ratingBadge}</td>
+              <td><span class="method-badge">${item.detection_method || "—"}</span></td>
+              <td><strong>${item.risk_score || 0}%</strong></td>
+              <td>${item.prediction || "—"}</td>
+              <td>${comment}</td>
+              <td>${date}</td>
+            </tr>`;
+        });
+      }
+
+      // ── Export CSV ──
+      function exportFeedbackCSV() {
+        if (!allFeedbackData || allFeedbackData.length === 0) {
+          alert("No feedback data to export!");
+          return;
+        }
+
+        const headers = [
+          "#",
+          "Rating",
+          "Detection Method",
+          "Risk Score",
+          "Prediction",
+          "Comment",
+          "Date",
+        ];
+        const rows = allFeedbackData.map((item, index) => [
+          index + 1,
+          item.rating === "thumbs_up" ? "Accurate" : "Inaccurate",
+          item.detection_method || "",
+          (item.risk_score || 0) + "%",
+          item.prediction || "",
+          `"${(item.comment || "").replace(/"/g, '""')}"`,
+          item.submitted_at ? new Date(item.submitted_at).toLocaleString() : "",
+        ]);
+
+        const csvContent = [headers, ...rows]
+          .map((r) => r.join(","))
+          .join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `jobdetect_feedback_${new Date().toISOString().split("T")[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // ── Logout ──
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "Login.html";
+        }
+      }
+    </script>
+  </body>
+</html>

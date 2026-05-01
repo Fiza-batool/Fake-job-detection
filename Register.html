@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - JobDetect</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #2d3e87 0%, #1a2847 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .register-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        background: #2d3e87;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo svg {
+        width: 50px;
+        height: 50px;
+      }
+
+      h2 {
+        color: #2d3e87;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #2d3e87;
+      }
+
+      .error-message {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .password-strength {
+        height: 4px;
+        background: #e5e5e5;
+        border-radius: 2px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: all 0.3s;
+      }
+
+      .password-strength-bar.weak {
+        width: 33%;
+        background: #dc2626;
+      }
+
+      .password-strength-bar.medium {
+        width: 66%;
+        background: #ea580c;
+      }
+
+      .password-strength-bar.strong {
+        width: 100%;
+        background: #16a34a;
+      }
+
+      .btn-register {
+        width: 100%;
+        padding: 14px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+      }
+
+      .btn-register:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(45, 62, 135, 0.3);
+      }
+
+      .btn-register:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .divider {
+        text-align: center;
+        margin: 25px 0;
+        color: #999;
+        position: relative;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background: #e5e5e5;
+      }
+
+      .divider::before {
+        left: 0;
+      }
+      .divider::after {
+        right: 0;
+      }
+
+      .login-link {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .login-link a {
+        color: #2d3e87;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+
+      .success-message {
+        background: #dcfce7;
+        color: #16a34a;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register-container">
+      <div class="logo-section">
+        <div class="logo">
+          <svg viewBox="0 0 50 50" fill="none">
+            <circle cx="25" cy="25" r="20" fill="white" opacity="0.3" />
+            <path
+              d="M25 10 L25 40 M15 20 L35 20 M15 30 L35 30"
+              stroke="white"
+              stroke-width="3"
+            />
+            <circle cx="25" cy="25" r="4" fill="#F47458" />
+          </svg>
+        </div>
+        <h2>Create Account</h2>
+        <p class="subtitle">Join us to detect fake jobs</p>
+      </div>
+
+      <!-- Success Message -->
+      <div id="successMessage" class="success-message">
+        Registration successful! Redirecting...
+      </div>
+
+      <!-- Register Form -->
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="John Doe"
+            required
+          />
+          <div id="nameError" class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="your.email@example.com"
+            required
+          />
+          <div id="emailError" class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Min 8 characters"
+            required
+          />
+          <div class="password-strength">
+            <div id="passwordStrengthBar" class="password-strength-bar"></div>
+          </div>
+          <div id="passwordError" class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Re-enter password"
+            required
+          />
+          <div id="confirmPasswordError" class="error-message"></div>
+        </div>
+
+        <button type="submit" id="registerBtn" class="btn-register">
+          Create Account
+        </button>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="Login.html">Login</a>
+      </div>
+    </div>
+
+    <!-- Include API -->
+    <script src="../services/api.js"></script>
+
+    <script>
+      // Password strength indicator
+      document
+        .getElementById("password")
+        .addEventListener("input", function (e) {
+          const password = e.target.value;
+          const strengthBar = document.getElementById("passwordStrengthBar");
+
+          let strength = 0;
+          if (password.length >= 8) strength++;
+          if (/[A-Z]/.test(password)) strength++;
+          if (/[0-9]/.test(password)) strength++;
+          if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+          strengthBar.className = "password-strength-bar";
+          if (strength >= 3) strengthBar.classList.add("strong");
+          else if (strength >= 2) strengthBar.classList.add("medium");
+          else if (strength >= 1) strengthBar.classList.add("weak");
+        });
+
+      // Form submission handler
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Get form values
+          const name = document.getElementById("name").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          // Clear previous errors
+          document.querySelectorAll(".error-message").forEach((el) => {
+            el.classList.remove("show");
+          });
+
+          // Validation
+          let hasError = false;
+
+          if (name.length < 3) {
+            showError("nameError", "Name must be at least 3 characters");
+            hasError = true;
+          }
+
+          if (!validateEmail(email)) {
+            showError("emailError", "Please enter a valid email address");
+            hasError = true;
+          }
+
+          if (password.length < 8) {
+            showError(
+              "passwordError",
+              "Password must be at least 8 characters"
+            );
+            hasError = true;
+          }
+
+          if (password !== confirmPassword) {
+            showError("confirmPasswordError", "Passwords do not match");
+            hasError = true;
+          }
+
+          if (hasError) return;
+
+          // Disable button during request
+          const registerBtn = document.getElementById("registerBtn");
+          registerBtn.disabled = true;
+          registerBtn.textContent = "Creating account...";
+
+          try {
+            // Call register API
+            const response = await registerUser({
+              name: name,
+              email: email,
+              password: password,
+            });
+
+            // Check for errors
+            if (response.error) {
+              showError("emailError", response.error);
+              registerBtn.disabled = false;
+              registerBtn.textContent = "Create Account";
+              return;
+            }
+
+            // Success! Store token and user info
+            if (response.token) {
+              localStorage.setItem("token", response.token);
+              localStorage.setItem("userName", response.user.name || name);
+              localStorage.setItem("userEmail", response.user.email || email);
+
+              // Show success message
+              document.getElementById("successMessage").classList.add("show");
+
+              // Redirect to detection page after 1 second
+              setTimeout(() => {
+                window.location.href = "detect.html";
+              }, 1000);
+            } else {
+              showError("emailError", "Registration failed. Please try again.");
+              registerBtn.disabled = false;
+              registerBtn.textContent = "Create Account";
+            }
+          } catch (error) {
+            console.error("Registration error:", error);
+            showError(
+              "emailError",
+              "Network error. Please check your connection."
+            );
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Create Account";
+          }
+        });
+
+      // Helper function to show errors
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.classList.add("show");
+      }
+
+      // Email validation
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      // Check if already logged in
+      if (localStorage.getItem("token")) {
+        window.location.href = "detect.html";
+      }
+    </script>
+  </body>
+</html>

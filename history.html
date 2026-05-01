@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History - JobDetect</title>
+    <link rel="stylesheet" href="../services/home.css" />
+    <style>
+      body {
+        background: #f0f4ff;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .history-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px;
+      }
+      .page-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .page-header h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #2d3e87;
+        margin-bottom: 8px;
+      }
+      .page-header p {
+        color: #666;
+        font-size: 16px;
+      }
+      .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .summary-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+      }
+      .summary-card .number {
+        font-size: 32px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .summary-card .label {
+        color: #666;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+      .controls {
+        background: white;
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+      }
+      .search-input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        min-width: 200px;
+      }
+      .search-input:focus {
+        border-color: #2d3e87;
+      }
+      .filter-select {
+        padding: 10px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        cursor: pointer;
+        background: white;
+      }
+      .filter-select:focus {
+        border-color: #2d3e87;
+      }
+      .btn-export {
+        padding: 10px 20px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+      .btn-export:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+      }
+      .btn-clear {
+        padding: 10px 20px;
+        background: #fee2e2;
+        color: #dc2626;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+      .btn-clear:hover {
+        background: #fecaca;
+      }
+      .table-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        overflow: hidden;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead {
+        background: #2d3e87;
+        color: white;
+      }
+      thead th {
+        padding: 16px 20px;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      tbody tr {
+        border-bottom: 1px solid #f0f4ff;
+        transition: background 0.2s;
+      }
+      tbody tr:hover {
+        background: #f8f9ff;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody td {
+        padding: 14px 20px;
+        font-size: 14px;
+        color: #333;
+      }
+      .type-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .type-text {
+        background: #e0e7ff;
+        color: #2d3e87;
+      }
+      .type-image {
+        background: #fce7f3;
+        color: #9d174d;
+      }
+      .type-url {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .risk-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .risk-low {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .risk-medium {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .risk-high {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .input-text {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #555;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      .empty-state h3 {
+        font-size: 22px;
+        color: #2d3e87;
+        margin-bottom: 8px;
+      }
+      .empty-state p {
+        color: #666;
+        margin-bottom: 24px;
+      }
+      .btn-detect {
+        display: inline-block;
+        padding: 12px 28px;
+        background: #2d3e87;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+      .btn-detect:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+      }
+      .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #f0f4ff;
+      }
+      .page-btn {
+        padding: 8px 14px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+      }
+      .page-btn:hover,
+      .page-btn.active {
+        background: #2d3e87;
+        color: white;
+        border-color: #2d3e87;
+      }
+      .page-info {
+        color: #666;
+        font-size: 14px;
+      }
+      @media (max-width: 768px) {
+        .summary-cards {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .controls {
+          flex-direction: column;
+        }
+        .search-input {
+          width: 100%;
+        }
+        table {
+          font-size: 12px;
+        }
+        thead th,
+        tbody td {
+          padding: 10px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container">
+        <div class="nav-brand">
+          <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+              <path
+                d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+                stroke="#2D3E87"
+                stroke-width="2"
+                fill="none"
+              />
+              <circle cx="20" cy="20" r="3" fill="#F47458" />
+            </svg>
+          </div>
+          <h1>JobDetect</h1>
+        </div>
+        <nav class="nav-menu">
+          <span class="user-info"
+            >Welcome, <strong id="userName">User</strong></span
+          >
+          <a href="detect.html">Detect Jobs</a>
+          <a href="faq.html">FAQ</a>
+          <a href="awareness.html">Awareness</a>
+          <a href="report.html">Report Job</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="history-container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h2>📋 Verification History</h2>
+        <p>All your past job verifications are listed here</p>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="number" id="totalCount">0</div>
+          <div class="label">Total Verifications</div>
+        </div>
+        <div class="summary-card">
+          <div class="number" id="fakeCount" style="color: #dc2626">0</div>
+          <div class="label">Fake Jobs Found</div>
+        </div>
+        <div class="summary-card">
+          <div class="number" id="realCount" style="color: #16a34a">0</div>
+          <div class="label">Real Jobs Found</div>
+        </div>
+        <div class="summary-card">
+          <div class="number" id="highRiskCount" style="color: #ea580c">0</div>
+          <div class="label">High Risk Detected</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <input
+          type="text"
+          class="search-input"
+          id="searchInput"
+          placeholder="🔍 Search history..."
+          oninput="filterHistory()"
+        />
+        <select
+          class="filter-select"
+          id="typeFilter"
+          onchange="filterHistory()"
+        >
+          <option value="all">All Types</option>
+          <option value="Text Detection">Text Detection</option>
+          <option value="Image Detection">Image Detection</option>
+          <option value="URL Verification">URL Verification</option>
+        </select>
+        <select
+          class="filter-select"
+          id="riskFilter"
+          onchange="filterHistory()"
+        >
+          <option value="all">All Risk Levels</option>
+          <option value="low">Low Risk (0-30%)</option>
+          <option value="medium">Medium Risk (31-70%)</option>
+          <option value="high">High Risk (71-100%)</option>
+        </select>
+        <button class="btn-export" onclick="exportCSV()">📥 Export CSV</button>
+        <button class="btn-clear" onclick="clearHistory()">🗑️ Clear All</button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <!-- Loading -->
+        <div class="loading-state" id="loadingState">⏳ Loading history...</div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none">
+          <h3>📭 No history found</h3>
+          <p>You have not verified any jobs yet. Make your first detection!</p>
+          <a href="detect.html" class="btn-detect">🔍 Detect a Job</a>
+        </div>
+
+        <!-- Table -->
+        <table id="historyTable" style="display: none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Input</th>
+              <th>Result</th>
+              <th>Risk Score</th>
+              <th>Risk Level</th>
+              <th>Date & Time</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display: none">
+          <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+            ← Previous
+          </button>
+          <span class="page-info" id="pageInfo">Page 1 of 1</span>
+          <button class="page-btn" id="nextBtn" onclick="changePage(1)">
+            Next →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../services/api.js"></script>
+    <script>
+      let allHistory = [];
+      let filteredHistory = [];
+      let currentPage = 1;
+      const itemsPerPage = 10;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        checkAuth();
+        loadUserName();
+        loadHistory();
+      });
+
+      function checkAuth() {
+        if (!localStorage.getItem("token")) {
+          window.location.href = "Login.html";
+        }
+      }
+
+      function loadUserName() {
+        const name = localStorage.getItem("userName") || "User";
+        document.getElementById("userName").textContent = name;
+      }
+
+      async function loadHistory() {
+        try {
+          const response = await fetch("http://127.0.0.1:5000/job/history");
+          const data = await response.json();
+          document.getElementById("loadingState").style.display = "none";
+
+          if (data.success && data.history.length > 0) {
+            allHistory = data.history;
+            filteredHistory = [...allHistory];
+            updateSummaryCards();
+            renderTable();
+          } else {
+            document.getElementById("emptyState").style.display = "block";
+          }
+        } catch (error) {
+          document.getElementById("loadingState").style.display = "none";
+          document.getElementById("emptyState").style.display = "block";
+          console.error("History load error:", error);
+        }
+      }
+
+      function updateSummaryCards() {
+        const total = allHistory.length;
+        const fake = allHistory.filter(
+          (h) => h.prediction === "Fake" || h.prediction === "Suspicious",
+        ).length;
+        const real = total - fake;
+        const highRisk = allHistory.filter((h) => h.risk_score > 70).length;
+
+        document.getElementById("totalCount").textContent = total;
+        document.getElementById("fakeCount").textContent = fake;
+        document.getElementById("realCount").textContent = real;
+        document.getElementById("highRiskCount").textContent = highRisk;
+      }
+
+      function renderTable() {
+        const table = document.getElementById("historyTable");
+        const tbody = document.getElementById("historyBody");
+        const pagination = document.getElementById("pagination");
+        const empty = document.getElementById("emptyState");
+
+        if (filteredHistory.length === 0) {
+          table.style.display = "none";
+          pagination.style.display = "none";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        table.style.display = "table";
+
+        const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageData = filteredHistory.slice(start, end);
+
+        tbody.innerHTML = "";
+        pageData.forEach((item, index) => {
+          const riskLevel = getRiskLevel(item.risk_score);
+          const row = `
+            <tr>
+              <td>${start + index + 1}</td>
+              <td>
+                <span class="type-badge ${getTypeClass(item.type)}">
+                  ${getTypeIcon(item.type)} ${item.type}
+                </span>
+              </td>
+              <td>
+                <div class="input-text" title="${item.input}">
+                  ${item.input}
+                </div>
+              </td>
+              <td><strong>${item.prediction}</strong></td>
+              <td><strong>${item.risk_score}%</strong></td>
+              <td>
+                <span class="risk-badge ${riskLevel.class}">
+                  ${riskLevel.label}
+                </span>
+              </td>
+              <td>${item.timestamp}</td>
+            </tr>`;
+          tbody.innerHTML += row;
+        });
+
+        if (totalPages > 1) {
+          pagination.style.display = "flex";
+          document.getElementById("pageInfo").textContent =
+            `Page ${currentPage} of ${totalPages}`;
+          document.getElementById("prevBtn").disabled = currentPage === 1;
+          document.getElementById("nextBtn").disabled =
+            currentPage === totalPages;
+        } else {
+          pagination.style.display = "none";
+        }
+      }
+
+      function getRiskLevel(score) {
+        if (score <= 30) return { label: "🟢 Low", class: "risk-low" };
+        if (score <= 70) return { label: "🟡 Medium", class: "risk-medium" };
+        return { label: "🔴 High", class: "risk-high" };
+      }
+
+      function getTypeClass(type) {
+        if (type === "Text Detection") return "type-text";
+        if (type === "Image Detection") return "type-image";
+        return "type-url";
+      }
+
+      function getTypeIcon(type) {
+        if (type === "Text Detection") return "📄";
+        if (type === "Image Detection") return "🖼️";
+        return "🔗";
+      }
+
+      function filterHistory() {
+        const search = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const typeFilter = document.getElementById("typeFilter").value;
+        const riskFilter = document.getElementById("riskFilter").value;
+
+        filteredHistory = allHistory.filter((item) => {
+          const matchSearch =
+            search === "" ||
+            item.input.toLowerCase().includes(search) ||
+            item.prediction.toLowerCase().includes(search) ||
+            item.type.toLowerCase().includes(search);
+
+          const matchType = typeFilter === "all" || item.type === typeFilter;
+
+          let matchRisk = true;
+          if (riskFilter === "low") matchRisk = item.risk_score <= 30;
+          else if (riskFilter === "medium")
+            matchRisk = item.risk_score > 30 && item.risk_score <= 70;
+          else if (riskFilter === "high") matchRisk = item.risk_score > 70;
+
+          return matchSearch && matchType && matchRisk;
+        });
+
+        currentPage = 1;
+        renderTable();
+      }
+
+      function changePage(direction) {
+        const totalPages = Math.ceil(filteredHistory.length / itemsPerPage);
+        currentPage = Math.max(
+          1,
+          Math.min(totalPages, currentPage + direction),
+        );
+        renderTable();
+      }
+
+      function exportCSV() {
+        if (filteredHistory.length === 0) {
+          alert("No history available to export!");
+          return;
+        }
+
+        const headers = [
+          "Type",
+          "Input",
+          "Result",
+          "Risk Score",
+          "Risk Level",
+          "Date & Time",
+        ];
+        const rows = filteredHistory.map((item) => [
+          item.type,
+          `"${item.input.replace(/"/g, '""')}"`,
+          item.prediction,
+          item.risk_score + "%",
+          getRiskLevel(item.risk_score)
+            .label.replace(/[🟢🟡🔴]/g, "")
+            .trim(),
+          item.timestamp,
+        ]);
+
+        const csvContent = [headers, ...rows]
+          .map((r) => r.join(","))
+          .join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `jobdetect_history_${new Date().toISOString().split("T")[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function clearHistory() {
+        if (
+          confirm(
+            "Are you sure you want to delete all history? This action cannot be undone!",
+          )
+        ) {
+          allHistory = [];
+          filteredHistory = [];
+          updateSummaryCards();
+          document.getElementById("historyTable").style.display = "none";
+          document.getElementById("pagination").style.display = "none";
+          document.getElementById("emptyState").style.display = "block";
+        }
+      }
+
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "Login.html";
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - JobDetect</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f4ff;
+        color: #1a1a2e;
+      }
+
+      /* ── Navbar ── */
+      .navbar {
+        background: #1a2847;
+        padding: 16px 0;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-brand h1 {
+        font-size: 22px;
+        font-weight: 800;
+        color: white;
+      }
+      .nav-brand span {
+        background: #f47458;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .nav-right span {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+      }
+      .btn-logout {
+        padding: 8px 20px;
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+      .btn-logout:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+      }
+
+      /* ── Login Screen ── */
+      .login-screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a2847 0%, #2d3e87 100%);
+      }
+      .login-box {
+        background: white;
+        border-radius: 20px;
+        padding: 48px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+      .login-box .admin-icon {
+        width: 80px;
+        height: 80px;
+        background: #1a2847;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+      }
+      .login-box h2 {
+        color: #1a2847;
+        font-size: 26px;
+        margin-bottom: 6px;
+      }
+      .login-box p {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      .login-form-group {
+        margin-bottom: 18px;
+        text-align: left;
+      }
+      .login-form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+      .login-form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .login-form-group input:focus {
+        border-color: #2d3e87;
+      }
+      .login-error {
+        color: #dc2626;
+        font-size: 13px;
+        margin-bottom: 12px;
+        display: none;
+      }
+      .login-error.show {
+        display: block;
+      }
+      .btn-admin-login {
+        width: 100%;
+        padding: 14px;
+        background: #1a2847;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-admin-login:hover {
+        background: #2d3e87;
+        transform: translateY(-2px);
+      }
+      .btn-admin-login:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* ── Main Dashboard ── */
+      .admin-dashboard {
+        display: none;
+      }
+
+      .main-container {
+        max-width: 1300px;
+        margin: 36px auto;
+        padding: 0 24px;
+      }
+
+      /* ── Stats Cards ── */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 22px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+        transition: transform 0.3s;
+      }
+      .stat-card:hover {
+        transform: translateY(-4px);
+      }
+      .stat-card .stat-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+      .stat-card .stat-number {
+        font-size: 32px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .stat-card .stat-label {
+        color: #666;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+
+      /* ── Tab Navigation ── */
+      .admin-tabs {
+        display: flex;
+        gap: 8px;
+        background: white;
+        padding: 10px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      .admin-tab-btn {
+        padding: 12px 22px;
+        border: 2px solid transparent;
+        background: transparent;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .admin-tab-btn:hover {
+        background: #e8f0fe;
+        color: #2d3e87;
+      }
+      .admin-tab-btn.active {
+        background: #1a2847;
+        color: white;
+        border-color: #1a2847;
+      }
+
+      /* ── Section Cards ── */
+      .section-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+        overflow: hidden;
+        margin-bottom: 24px;
+        display: none;
+      }
+      .section-card.active {
+        display: block;
+      }
+
+      .section-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        background: #f8f9ff;
+      }
+      .section-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a2847;
+      }
+      .section-header p {
+        font-size: 13px;
+        color: #666;
+        margin-top: 2px;
+      }
+
+      /* ── Buttons ── */
+      .btn-refresh {
+        padding: 9px 18px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-refresh:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+      }
+      .btn-export {
+        padding: 9px 18px;
+        background: #16a34a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-export:hover {
+        background: #15803d;
+        transform: translateY(-2px);
+      }
+      .btn-danger-sm {
+        padding: 6px 14px;
+        background: #fee2e2;
+        color: #dc2626;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-danger-sm:hover {
+        background: #fecaca;
+      }
+
+      /* ── Tables ── */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead {
+        background: #1a2847;
+        color: white;
+      }
+      thead th {
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      tbody tr {
+        border-bottom: 1px solid #f0f4ff;
+        transition: background 0.2s;
+      }
+      tbody tr:hover {
+        background: #f8f9ff;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody td {
+        padding: 13px 18px;
+        font-size: 13px;
+        color: #333;
+      }
+
+      /* ── Badges ── */
+      .badge {
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-block;
+      }
+      .badge-fake {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-real {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-safe {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-suspicious {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge-text {
+        background: #e0e7ff;
+        color: #2d3e87;
+      }
+      .badge-image {
+        background: #fce7f3;
+        color: #9d174d;
+      }
+      .badge-url {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-up {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-down {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* ── Truncate text ── */
+      .truncate {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ── Empty / Loading State ── */
+      .empty-state,
+      .loading-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #999;
+      }
+      .empty-state h4 {
+        color: #2d3e87;
+        margin-bottom: 6px;
+      }
+
+      /* ── Audit Log ── */
+      .audit-entry {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        transition: background 0.2s;
+      }
+      .audit-entry:hover {
+        background: #f8f9ff;
+      }
+      .audit-entry:last-child {
+        border-bottom: none;
+      }
+      .audit-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+        background: #e8f0fe;
+      }
+      .audit-content {
+        flex: 1;
+      }
+      .audit-content .audit-action {
+        font-weight: 600;
+        color: #1a2847;
+        font-size: 14px;
+      }
+      .audit-content .audit-detail {
+        color: #666;
+        font-size: 13px;
+        margin-top: 2px;
+      }
+      .audit-time {
+        font-size: 12px;
+        color: #999;
+        white-space: nowrap;
+      }
+
+      /* ── Search Bar ── */
+      .search-bar {
+        display: flex;
+        gap: 10px;
+        padding: 16px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        flex-wrap: wrap;
+      }
+      .search-bar input,
+      .search-bar select {
+        padding: 9px 14px;
+        border: 2px solid #e0e7ff;
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .search-bar input {
+        flex: 1;
+        min-width: 180px;
+      }
+      .search-bar input:focus,
+      .search-bar select:focus {
+        border-color: #2d3e87;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .admin-tabs {
+          gap: 4px;
+        }
+        .admin-tab-btn {
+          padding: 10px 14px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- =============================================
+         FR9: ADMIN LOGIN SCREEN
+         Input: Admin credentials
+         Validation: admin authentication & authorization
+    ============================================= -->
+    <div class="login-screen" id="loginScreen">
+      <div class="login-box">
+        <div class="admin-icon">🔐</div>
+        <h2>Admin Panel</h2>
+        <p>JobDetect — Secure Administrator Access</p>
+
+        <div class="login-form-group">
+          <label>Admin Username</label>
+          <input
+            type="text"
+            id="adminUsername"
+            placeholder="Enter admin username"
+          />
+        </div>
+        <div class="login-form-group">
+          <label>Admin Password</label>
+          <input
+            type="password"
+            id="adminPassword"
+            placeholder="Enter admin password"
+            onkeydown="if (event.key === 'Enter') adminLogin();"
+          />
+        </div>
+
+        <div class="login-error" id="loginError">
+          ❌ Invalid credentials. Please try again.
+        </div>
+
+        <button class="btn-admin-login" onclick="adminLogin()" id="loginBtn">
+          🔐 Login as Administrator
+        </button>
+      </div>
+    </div>
+
+    <!-- =============================================
+         FR9: ADMIN DASHBOARD (shown after login)
+    ============================================= -->
+    <div class="admin-dashboard" id="adminDashboard">
+      <!-- Navbar -->
+      <header class="navbar">
+        <div class="container">
+          <div class="nav-brand">
+            <svg width="36" height="36" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.4" />
+              <path
+                d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+                stroke="white"
+                stroke-width="2"
+                fill="none"
+              />
+              <circle cx="20" cy="20" r="3" fill="#F47458" />
+            </svg>
+            <h1>JobDetect</h1>
+            <span>ADMIN</span>
+          </div>
+          <div class="nav-right">
+            <span>👤 Administrator</span>
+            <button class="btn-logout" onclick="adminLogout()">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-container">
+        <!-- Page Title -->
+        <div style="margin-bottom: 24px">
+          <h2 style="font-size: 28px; color: #1a2847; font-weight: 800">
+            📊 Admin Dashboard
+          </h2>
+          <p style="color: #666; margin-top: 4px">
+            FR9: Manual Database Management — View, manage, and monitor all
+            system data
+          </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🔍</div>
+            <div class="stat-number" id="statDetections">0</div>
+            <div class="stat-label">Total Detections</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🚨</div>
+            <div class="stat-number" id="statReports">0</div>
+            <div class="stat-label">Total Reports</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number" id="statFeedback">0</div>
+            <div class="stat-label">Total Feedback</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number" id="statSatisfaction">0%</div>
+            <div class="stat-label">User Satisfaction</div>
+          </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="admin-tabs">
+          <button
+            class="admin-tab-btn active"
+            onclick="switchAdminTab('detections', this)"
+          >
+            🔍 Detection History
+          </button>
+          <button
+            class="admin-tab-btn"
+            onclick="switchAdminTab('reports', this)"
+          >
+            🚨 Reported Jobs
+          </button>
+          <button
+            class="admin-tab-btn"
+            onclick="switchAdminTab('feedback', this)"
+          >
+            📊 User Feedback
+          </button>
+          <button class="admin-tab-btn" onclick="switchAdminTab('audit', this)">
+            📋 Audit Logs
+          </button>
+        </div>
+
+        <!-- =============================================
+             TAB 1: Detection History
+        ============================================= -->
+        <div class="section-card active" id="tab-detections">
+          <div class="section-header">
+            <div>
+              <h3>🔍 Detection History</h3>
+              <p>All user verification activities — FR2, FR3, FR4 results</p>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button class="btn-refresh" onclick="loadDetections()">
+                🔄 Refresh
+              </button>
+              <button class="btn-export" onclick="exportCSV('detections')">
+                📥 Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="search-bar">
+            <input
+              type="text"
+              id="detectionSearch"
+              placeholder="🔍 Search by input or prediction..."
+              oninput="filterDetections()"
+            />
+            <select id="detectionTypeFilter" onchange="filterDetections()">
+              <option value="all">All Types</option>
+              <option value="Text Detection">Text Detection</option>
+              <option value="Image Detection">Image Detection</option>
+              <option value="URL Verification">URL Verification</option>
+            </select>
+            <select id="detectionRiskFilter" onchange="filterDetections()">
+              <option value="all">All Risk Levels</option>
+              <option value="low">Low (0-30%)</option>
+              <option value="medium">Medium (31-70%)</option>
+              <option value="high">High (71-100%)</option>
+            </select>
+          </div>
+
+          <div class="loading-state" id="detectionsLoading">⏳ Loading...</div>
+          <div class="empty-state" id="detectionsEmpty" style="display: none">
+            <h4>📭 No detections yet</h4>
+            <p>
+              Detection records will appear here after users run verifications.
+            </p>
+          </div>
+
+          <div
+            class="table-wrap"
+            id="detectionsTableWrap"
+            style="display: none"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Type</th>
+                  <th>Input</th>
+                  <th>Prediction</th>
+                  <th>Risk Score</th>
+                  <th>Risk Level</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="detectionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- =============================================
+             TAB 2: Reported Jobs
+        ============================================= -->
+        <div class="section-card" id="tab-reports">
+          <div class="section-header">
+            <div>
+              <h3>🚨 Reported Jobs</h3>
+              <p>Community-reported suspicious job postings — FR7 data</p>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button class="btn-refresh" onclick="loadReports()">
+                🔄 Refresh
+              </button>
+              <button class="btn-export" onclick="exportCSV('reports')">
+                📥 Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="loading-state" id="reportsLoading">⏳ Loading...</div>
+          <div class="empty-state" id="reportsEmpty" style="display: none">
+            <h4>📭 No reports yet</h4>
+            <p>User-submitted job reports will appear here.</p>
+          </div>
+
+          <div class="table-wrap" id="reportsTableWrap" style="display: none">
+            <table>
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Reason</th>
+                  <th>Description</th>
+                  <th>Job URL</th>
+                  <th>Status</th>
+                  <th>Reported At</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reportsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- =============================================
+             TAB 3: User Feedback
+        ============================================= -->
+        <div class="section-card" id="tab-feedback">
+          <div class="section-header">
+            <div>
+              <h3>📊 User Feedback</h3>
+              <p>Detection accuracy ratings from users — FR11 data</p>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button class="btn-refresh" onclick="loadFeedback()">
+                🔄 Refresh
+              </button>
+              <button class="btn-export" onclick="exportCSV('feedback')">
+                📥 Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="loading-state" id="feedbackLoading">⏳ Loading...</div>
+          <div class="empty-state" id="feedbackEmpty" style="display: none">
+            <h4>📭 No feedback yet</h4>
+            <p>User feedback on detection results will appear here.</p>
+          </div>
+
+          <div class="table-wrap" id="feedbackTableWrap" style="display: none">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Rating</th>
+                  <th>Detection Method</th>
+                  <th>Risk Score</th>
+                  <th>Prediction</th>
+                  <th>Comment</th>
+                  <th>Submitted At</th>
+                </tr>
+              </thead>
+              <tbody id="feedbackBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- =============================================
+             TAB 4: Audit Logs
+             FR9: Operation logging and audit trails
+        ============================================= -->
+        <div class="section-card" id="tab-audit">
+          <div class="section-header">
+            <div>
+              <h3>📋 Audit Logs</h3>
+              <p>FR9: All admin operations are logged here for audit trail</p>
+            </div>
+            <button class="btn-refresh" onclick="loadAuditLogs()">
+              🔄 Refresh
+            </button>
+          </div>
+
+          <div class="loading-state" id="auditLoading">⏳ Loading...</div>
+          <div class="empty-state" id="auditEmpty" style="display: none">
+            <h4>📋 No audit logs yet</h4>
+            <p>Admin actions will be logged here.</p>
+          </div>
+
+          <div id="auditLogsList"></div>
+        </div>
+      </div>
+      <!-- end main-container -->
+    </div>
+    <!-- end admin-dashboard -->
+
+    <script>
+      // =============================================
+      // FR9: Admin Authentication
+      // Admin credentials: admin / admin123
+      // =============================================
+      const ADMIN_CREDENTIALS = {
+        username: "admin",
+        password: "admin123",
+      };
+
+      const API_BASE = "http://127.0.0.1:5000";
+
+      // Store data globally for export
+      let detectionsData = [];
+      let reportsData = [];
+      let feedbackData = [];
+
+      // ── Admin Login ──
+      function adminLogin() {
+        const username = document.getElementById("adminUsername").value.trim();
+        const password = document.getElementById("adminPassword").value;
+        const loginBtn = document.getElementById("loginBtn");
+        const loginError = document.getElementById("loginError");
+
+        loginError.classList.remove("show");
+
+        // FR9 Validation: Admin authentication & authorization
+        if (!username || !password) {
+          loginError.textContent =
+            "❌ Please enter both username and password.";
+          loginError.classList.add("show");
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Authenticating...";
+
+        // Simulate authentication check
+        setTimeout(() => {
+          if (
+            username === ADMIN_CREDENTIALS.username &&
+            password === ADMIN_CREDENTIALS.password
+          ) {
+            // FR9: Log successful admin login
+            logAdminAction(
+              "Admin Login",
+              `Administrator logged in successfully`,
+            );
+
+            // Show dashboard
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("adminDashboard").style.display = "block";
+
+            // Load all data
+            loadAllData();
+          } else {
+            loginError.textContent =
+              "❌ Invalid credentials. Please try again.";
+            loginError.classList.add("show");
+            loginBtn.disabled = false;
+            loginBtn.textContent = "🔐 Login as Administrator";
+          }
+        }, 800);
+      }
+
+      // ── Admin Logout ──
+      function adminLogout() {
+        if (confirm("Are you sure you want to logout from admin panel?")) {
+          logAdminAction("Admin Logout", "Administrator logged out");
+          document.getElementById("adminDashboard").style.display = "none";
+          document.getElementById("loginScreen").style.display = "flex";
+          document.getElementById("adminUsername").value = "";
+          document.getElementById("adminPassword").value = "";
+          document.getElementById("loginBtn").disabled = false;
+          document.getElementById("loginBtn").textContent =
+            "🔐 Login as Administrator";
+        }
+      }
+
+      // ── Tab Switching ──
+      function switchAdminTab(tabName, btn) {
+        document
+          .querySelectorAll(".admin-tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelectorAll(".section-card")
+          .forEach((c) => c.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("tab-" + tabName).classList.add("active");
+
+        // FR9: Log tab view in audit trail
+        logAdminAction("View Tab", `Admin viewed ${tabName} section`);
+      }
+
+      // ── Load All Data ──
+      function loadAllData() {
+        loadDetections();
+        loadReports();
+        loadFeedback();
+        loadAuditLogs();
+      }
+
+      // =============================================
+      // FR9: Detection History Management
+      // =============================================
+      async function loadDetections() {
+        document.getElementById("detectionsLoading").style.display = "block";
+        document.getElementById("detectionsEmpty").style.display = "none";
+        document.getElementById("detectionsTableWrap").style.display = "none";
+
+        try {
+          const res = await fetch(`${API_BASE}/job/history`);
+          const data = await res.json();
+
+          document.getElementById("detectionsLoading").style.display = "none";
+
+          if (data.success && data.history && data.history.length > 0) {
+            detectionsData = data.history;
+            document.getElementById("statDetections").textContent =
+              data.total || data.history.length;
+            renderDetections(detectionsData);
+          } else {
+            document.getElementById("detectionsEmpty").style.display = "block";
+            document.getElementById("statDetections").textContent = "0";
+          }
+        } catch (error) {
+          document.getElementById("detectionsLoading").style.display = "none";
+          document.getElementById("detectionsEmpty").style.display = "block";
+          console.error("Error loading detections:", error);
+        }
+
+        logAdminAction("Load Data", "Admin loaded detection history records");
+      }
+
+      function renderDetections(list) {
+        const tbody = document.getElementById("detectionsBody");
+        const wrap = document.getElementById("detectionsTableWrap");
+        const empty = document.getElementById("detectionsEmpty");
+
+        if (!list || list.length === 0) {
+          wrap.style.display = "none";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        wrap.style.display = "block";
+        tbody.innerHTML = "";
+
+        list.forEach((item, index) => {
+          const risk = item.risk_score || 0;
+          let riskLevel, riskClass;
+          if (risk <= 30) {
+            riskLevel = "🟢 Low";
+            riskClass = "badge-real";
+          } else if (risk <= 70) {
+            riskLevel = "🟡 Medium";
+            riskClass = "badge-pending";
+          } else {
+            riskLevel = "🔴 High";
+            riskClass = "badge-fake";
+          }
+
+          const typeClass =
+            item.type === "Text Detection"
+              ? "badge-text"
+              : item.type === "Image Detection"
+                ? "badge-image"
+                : "badge-url";
+
+          tbody.innerHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td><span class="badge ${typeClass}">${item.type || "—"}</span></td>
+              <td><div class="truncate" title="${item.input}">${item.input || "—"}</div></td>
+              <td><span class="badge ${item.prediction === "Fake" || item.prediction === "Suspicious" ? "badge-fake" : "badge-real"}">
+                ${item.prediction || "—"}
+              </span></td>
+              <td><strong>${risk}%</strong></td>
+              <td><span class="badge ${riskClass}">${riskLevel}</span></td>
+              <td>${item.timestamp || "—"}</td>
+            </tr>`;
+        });
+      }
+
+      function filterDetections() {
+        const search = document
+          .getElementById("detectionSearch")
+          .value.toLowerCase();
+        const typeFilter = document.getElementById("detectionTypeFilter").value;
+        const riskFilter = document.getElementById("detectionRiskFilter").value;
+
+        const filtered = detectionsData.filter((item) => {
+          const matchSearch =
+            !search ||
+            (item.input || "").toLowerCase().includes(search) ||
+            (item.prediction || "").toLowerCase().includes(search);
+
+          const matchType = typeFilter === "all" || item.type === typeFilter;
+
+          const risk = item.risk_score || 0;
+          let matchRisk = true;
+          if (riskFilter === "low") matchRisk = risk <= 30;
+          if (riskFilter === "medium") matchRisk = risk > 30 && risk <= 70;
+          if (riskFilter === "high") matchRisk = risk > 70;
+
+          return matchSearch && matchType && matchRisk;
+        });
+
+        renderDetections(filtered);
+      }
+
+      // =============================================
+      // FR9: Reports Management
+      // =============================================
+      async function loadReports() {
+        document.getElementById("reportsLoading").style.display = "block";
+        document.getElementById("reportsEmpty").style.display = "none";
+        document.getElementById("reportsTableWrap").style.display = "none";
+
+        try {
+          const res = await fetch(`${API_BASE}/job/reports`);
+          const data = await res.json();
+
+          document.getElementById("reportsLoading").style.display = "none";
+
+          if (data.success && data.reports && data.reports.length > 0) {
+            reportsData = data.reports;
+            document.getElementById("statReports").textContent =
+              data.total_reports || data.reports.length;
+            renderReports(reportsData);
+          } else {
+            document.getElementById("reportsEmpty").style.display = "block";
+            document.getElementById("statReports").textContent = "0";
+          }
+        } catch (error) {
+          document.getElementById("reportsLoading").style.display = "none";
+          document.getElementById("reportsEmpty").style.display = "block";
+          console.error("Error loading reports:", error);
+        }
+
+        logAdminAction("Load Data", "Admin loaded reports records");
+      }
+
+      function renderReports(list) {
+        const tbody = document.getElementById("reportsBody");
+        const wrap = document.getElementById("reportsTableWrap");
+        const empty = document.getElementById("reportsEmpty");
+
+        if (!list || list.length === 0) {
+          wrap.style.display = "none";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        wrap.style.display = "block";
+        tbody.innerHTML = "";
+
+        list.forEach((item) => {
+          const date = item.reported_at
+            ? new Date(item.reported_at).toLocaleString()
+            : "—";
+
+          tbody.innerHTML += `
+            <tr>
+              <td><strong>${item.id || "—"}</strong></td>
+              <td>${item.reason || "—"}</td>
+              <td><div class="truncate" title="${item.description}">${item.description || "—"}</div></td>
+              <td><div class="truncate" title="${item.url}">${item.url || "N/A"}</div></td>
+              <td><span class="badge badge-pending">${item.status || "pending"}</span></td>
+              <td>${date}</td>
+              <td>
+                <button class="btn-danger-sm"
+                  onclick="markReviewed('${item.id}')">
+                  ✓ Reviewed
+                </button>
+              </td>
+            </tr>`;
+        });
+      }
+
+      function markReviewed(reportId) {
+        // FR9: Log admin action in audit trail
+        logAdminAction(
+          "Report Reviewed",
+          `Admin marked report ${reportId} as reviewed`,
+        );
+        alert(
+          `✅ Report ${reportId} marked as reviewed.\n\nThis action has been logged in the audit trail.`,
+        );
+      }
+
+      // =============================================
+      // FR9: Feedback Management
+      // =============================================
+      async function loadFeedback() {
+        document.getElementById("feedbackLoading").style.display = "block";
+        document.getElementById("feedbackEmpty").style.display = "none";
+        document.getElementById("feedbackTableWrap").style.display = "none";
+
+        try {
+          const res = await fetch(`${API_BASE}/job/feedback/stats`);
+          const data = await res.json();
+
+          document.getElementById("feedbackLoading").style.display = "none";
+
+          if (data.success && data.feedback && data.feedback.length > 0) {
+            feedbackData = data.feedback;
+            document.getElementById("statFeedback").textContent =
+              data.total_feedback || 0;
+            document.getElementById("statSatisfaction").textContent =
+              (data.satisfaction_rate || 0) + "%";
+            renderFeedback(feedbackData);
+          } else {
+            document.getElementById("feedbackEmpty").style.display = "block";
+            document.getElementById("statFeedback").textContent = "0";
+            document.getElementById("statSatisfaction").textContent = "0%";
+          }
+        } catch (error) {
+          document.getElementById("feedbackLoading").style.display = "none";
+          document.getElementById("feedbackEmpty").style.display = "block";
+          console.error("Error loading feedback:", error);
+        }
+
+        logAdminAction("Load Data", "Admin loaded user feedback records");
+      }
+
+      function renderFeedback(list) {
+        const tbody = document.getElementById("feedbackBody");
+        const wrap = document.getElementById("feedbackTableWrap");
+        const empty = document.getElementById("feedbackEmpty");
+
+        if (!list || list.length === 0) {
+          wrap.style.display = "none";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        wrap.style.display = "block";
+        tbody.innerHTML = "";
+
+        list.forEach((item, index) => {
+          const isPositive = item.rating === "thumbs_up";
+          const date = item.submitted_at
+            ? new Date(item.submitted_at).toLocaleString()
+            : "—";
+
+          tbody.innerHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>
+                <span class="badge ${isPositive ? "badge-up" : "badge-down"}">
+                  ${isPositive ? "👍 Accurate" : "👎 Inaccurate"}
+                </span>
+              </td>
+              <td>${item.detection_method || "—"}</td>
+              <td><strong>${item.risk_score || 0}%</strong></td>
+              <td>${item.prediction || "—"}</td>
+              <td><div class="truncate" title="${item.comment}">${item.comment || "—"}</div></td>
+              <td>${date}</td>
+            </tr>`;
+        });
+      }
+
+      // =============================================
+      // FR9: Audit Logs — Operation Logging
+      // Every admin action is logged here
+      // =============================================
+      let auditLogs = [];
+
+      function logAdminAction(action, detail) {
+        const entry = {
+          action: action,
+          detail: detail,
+          timestamp: new Date().toLocaleString(),
+          icon: getAuditIcon(action),
+        };
+        auditLogs.unshift(entry); // newest first
+        renderAuditLogs();
+      }
+
+      function getAuditIcon(action) {
+        if (action.includes("Login")) return "🔐";
+        if (action.includes("Logout")) return "🚪";
+        if (action.includes("Load")) return "📥";
+        if (action.includes("View")) return "👁️";
+        if (action.includes("Export")) return "📤";
+        if (action.includes("Report")) return "✅";
+        if (action.includes("Delete")) return "🗑️";
+        return "📋";
+      }
+
+      async function loadAuditLogs() {
+        try {
+          const res = await fetch(`${API_BASE}/admin/audit-logs`);
+          const data = await res.json();
+          if (data.success && data.logs) {
+            // Merge backend logs with local logs
+            data.logs.forEach((log) => {
+              auditLogs.push({
+                action: log.action,
+                detail: log.detail,
+                timestamp: log.timestamp,
+                icon: getAuditIcon(log.action),
+              });
+            });
+          }
+        } catch (error) {
+          // Backend logs not available — use local logs only
+        }
+        renderAuditLogs();
+      }
+
+      function renderAuditLogs() {
+        const container = document.getElementById("auditLogsList");
+        const loading = document.getElementById("auditLoading");
+        const empty = document.getElementById("auditEmpty");
+
+        loading.style.display = "none";
+
+        if (!auditLogs || auditLogs.length === 0) {
+          empty.style.display = "block";
+          container.innerHTML = "";
+          return;
+        }
+
+        empty.style.display = "none";
+        container.innerHTML = auditLogs
+          .map(
+            (log) => `
+          <div class="audit-entry">
+            <div class="audit-icon">${log.icon}</div>
+            <div class="audit-content">
+              <div class="audit-action">${log.action}</div>
+              <div class="audit-detail">${log.detail}</div>
+            </div>
+            <div class="audit-time">${log.timestamp}</div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      // =============================================
+      // FR9: Export CSV — Database operation confirmation
+      // =============================================
+      function exportCSV(type) {
+        let data = [];
+        let headers = [];
+        let filename = "";
+
+        if (type === "detections") {
+          data = detectionsData;
+          headers = ["Type", "Input", "Prediction", "Risk Score", "Timestamp"];
+          filename = "jobdetect_detections";
+          data = data.map((i) => [
+            i.type,
+            `"${(i.input || "").replace(/"/g, '""')}"`,
+            i.prediction,
+            i.risk_score + "%",
+            i.timestamp,
+          ]);
+          logAdminAction(
+            "Export CSV",
+            "Admin exported detection history as CSV",
+          );
+        } else if (type === "reports") {
+          data = reportsData;
+          headers = [
+            "Report ID",
+            "Reason",
+            "Description",
+            "URL",
+            "Status",
+            "Reported At",
+          ];
+          filename = "jobdetect_reports";
+          data = data.map((i) => [
+            i.id,
+            i.reason,
+            `"${(i.description || "").replace(/"/g, '""')}"`,
+            i.url || "",
+            i.status,
+            i.reported_at ? new Date(i.reported_at).toLocaleString() : "",
+          ]);
+          logAdminAction("Export CSV", "Admin exported reports data as CSV");
+        } else if (type === "feedback") {
+          data = feedbackData;
+          headers = [
+            "Rating",
+            "Method",
+            "Risk Score",
+            "Prediction",
+            "Comment",
+            "Submitted At",
+          ];
+          filename = "jobdetect_feedback";
+          data = data.map((i) => [
+            i.rating === "thumbs_up" ? "Accurate" : "Inaccurate",
+            i.detection_method,
+            i.risk_score + "%",
+            i.prediction,
+            `"${(i.comment || "").replace(/"/g, '""')}"`,
+            i.submitted_at ? new Date(i.submitted_at).toLocaleString() : "",
+          ]);
+          logAdminAction("Export CSV", "Admin exported feedback data as CSV");
+        }
+
+        if (data.length === 0) {
+          alert("No data to export!");
+          return;
+        }
+
+        const csvContent = [headers, ...data]
+          .map((r) => r.join(","))
+          .join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${filename}_${new Date().toISOString().split("T")[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    </script>
+  </body>
+</html>

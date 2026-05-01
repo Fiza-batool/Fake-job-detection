@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report a Job - JobDetect</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f4ff;
+        color: #1a1a2e;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: white;
+        padding: 16px 0;
+        box-shadow: 0 2px 20px rgba(45, 62, 135, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+      .nav-brand h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-menu a:hover {
+        color: #2d3e87;
+      }
+      .nav-menu .active-link {
+        color: #dc2626;
+        font-weight: 700;
+      }
+      .btn-outline {
+        border: 2px solid #2d3e87;
+        color: #2d3e87 !important;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600 !important;
+      }
+      .btn-outline:hover {
+        background: #2d3e87;
+        color: white !important;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #1a2847 0%, #dc2626 100%);
+        padding: 56px 24px;
+        text-align: center;
+        color: white;
+      }
+      .hero h2 {
+        font-size: 40px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .hero p {
+        font-size: 17px;
+        opacity: 0.9;
+      }
+
+      /* Container */
+      .main-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 24px;
+      }
+
+      /* Stats */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+      }
+      .stat-card .num {
+        font-size: 30px;
+        font-weight: 800;
+        color: #dc2626;
+      }
+      .stat-card .lbl {
+        color: #666;
+        font-size: 13px;
+        margin-top: 4px;
+      }
+
+      /* Form Card */
+      .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 36px;
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.08);
+        border: 1px solid #e8f0fe;
+        margin-bottom: 32px;
+      }
+      .form-card .card-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #1a2847;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .form-card .card-sub {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+
+      /* Form Fields */
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .form-group label .req {
+        color: #dc2626;
+      }
+      .form-group select,
+      .form-group textarea,
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e7ff;
+        border-radius: 10px;
+        font-size: 15px;
+        font-family: "Segoe UI", sans-serif;
+        outline: none;
+        transition: border-color 0.3s;
+        background: white;
+      }
+      .form-group select:focus,
+      .form-group textarea:focus,
+      .form-group input:focus {
+        border-color: #2d3e87;
+        box-shadow: 0 0 0 3px rgba(45, 62, 135, 0.08);
+      }
+      .form-group textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      .char-count {
+        text-align: right;
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+      }
+      .field-error {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+      }
+      .field-error.show {
+        display: block;
+      }
+      .optional-tag {
+        font-weight: 400;
+        color: #999;
+        font-size: 12px;
+        margin-left: 4px;
+      }
+
+      /* Submit Button */
+      .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 8px;
+      }
+      .btn-submit:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+      }
+      .btn-submit:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Success */
+      .success-box {
+        background: #dcfce7;
+        border: 2px solid #16a34a;
+        border-radius: 16px;
+        padding: 32px;
+        text-align: center;
+        display: none;
+      }
+      .success-box.show {
+        display: block;
+      }
+      .success-box .success-icon {
+        font-size: 56px;
+        margin-bottom: 16px;
+      }
+      .success-box h3 {
+        color: #166534;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+      .success-box p {
+        color: #166534;
+        font-size: 15px;
+        margin-bottom: 6px;
+      }
+      .success-box .report-id {
+        font-size: 20px;
+        font-weight: 800;
+        color: #166534;
+        background: white;
+        display: inline-block;
+        padding: 8px 24px;
+        border-radius: 50px;
+        margin: 12px 0;
+        border: 2px solid #16a34a;
+      }
+      .btn-another {
+        margin-top: 20px;
+        padding: 12px 28px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-another:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+      }
+
+      /* Error Alert */
+      .error-alert {
+        background: #fee2e2;
+        border: 2px solid #dc2626;
+        border-radius: 10px;
+        padding: 14px 18px;
+        color: #991b1b;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: none;
+      }
+      .error-alert.show {
+        display: block;
+      }
+
+      /* Info Box */
+      .info-box {
+        background: #f0f4ff;
+        border-left: 4px solid #2d3e87;
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        margin-bottom: 24px;
+        font-size: 14px;
+        color: #2d3e87;
+      }
+
+      /* Recent Reports */
+      .reports-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.08);
+        overflow: hidden;
+        border: 1px solid #e8f0fe;
+      }
+      .reports-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        background: #f8f9ff;
+      }
+      .reports-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a2847;
+      }
+      .reports-header p {
+        font-size: 13px;
+        color: #666;
+        margin-top: 2px;
+      }
+      .report-item {
+        padding: 16px 24px;
+        border-bottom: 1px solid #f0f4ff;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .report-item:last-child {
+        border-bottom: none;
+      }
+      .report-item .r-icon {
+        font-size: 28px;
+      }
+      .report-item .r-content {
+        flex: 1;
+      }
+      .report-item .r-id {
+        font-size: 12px;
+        font-weight: 700;
+        color: #2d3e87;
+      }
+      .report-item .r-reason {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a2847;
+        margin: 2px 0;
+      }
+      .report-item .r-desc {
+        font-size: 13px;
+        color: #666;
+      }
+      .report-item .r-time {
+        font-size: 12px;
+        color: #999;
+        white-space: nowrap;
+      }
+      .badge-pending {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+      }
+      .empty-state h4 {
+        color: #2d3e87;
+        margin-bottom: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .stats-row {
+          grid-template-columns: 1fr;
+        }
+        .hero h2 {
+          font-size: 28px;
+        }
+        .form-card {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container">
+        <a href="home.html" class="nav-brand">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+            <path
+              d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+              stroke="#2D3E87"
+              stroke-width="2"
+              fill="none"
+            />
+            <circle cx="20" cy="20" r="3" fill="#F47458" />
+          </svg>
+          <h1>JobDetect</h1>
+        </a>
+        <nav class="nav-menu">
+          <span style="color: #555; font-size: 14px"
+            >Welcome, <strong id="userName">User</strong></span
+          >
+          <a href="detect.html">Detect Jobs</a>
+          <a href="awareness.html">Awareness</a>
+          <a href="report.html" class="active-link">Report Job</a>
+          <a href="history.html">History</a>
+          <a href="faq.html">FAQ</a>
+          <a href="feedback.html">Feedback</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h2>🚨 Report a Suspicious Job</h2>
+      <p>Help protect the community by reporting fake job postings</p>
+    </div>
+
+    <!-- Main -->
+    <div class="main-container">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="num" id="totalReports">0</div>
+          <div class="lbl">Total Reports Submitted</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" style="color: #f59e0b" id="pendingReports">0</div>
+          <div class="lbl">Pending Review</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" style="color: #16a34a">👥</div>
+          <div class="lbl">Community Protected</div>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card">
+        <div class="card-title">📋 Submit a Report</div>
+        <div class="card-sub">
+          All reports are reviewed by our admin team. Provide as much detail as
+          possible to help us take action quickly.
+        </div>
+
+        <div class="info-box">
+          💡 Your report is anonymous and will be reviewed within 24 hours.
+          Duplicate reports are automatically detected.
+        </div>
+
+        <!-- Error Alert -->
+        <div class="error-alert" id="errorAlert"></div>
+
+        <!-- Form -->
+        <div id="reportForm">
+          <!-- Reason -->
+          <div class="form-group">
+            <label>Reason for Reporting <span class="req">*</span></label>
+            <select id="reason">
+              <option value="">-- Select a reason --</option>
+              <option value="Payment Required">
+                💰 Payment Required (asked for fee)
+              </option>
+              <option value="Personal Information Theft">
+                🔐 Personal Information Theft
+              </option>
+              <option value="Fake Company">🏢 Fake Company</option>
+              <option value="Too Good To Be True">
+                💸 Too Good To Be True (unrealistic salary)
+              </option>
+              <option value="Suspicious URL">
+                🔗 Suspicious URL / Website
+              </option>
+              <option value="Duplicate Posting">
+                📋 Duplicate / Spam Posting
+              </option>
+              <option value="Other">📝 Other</option>
+            </select>
+            <div class="field-error" id="reasonError">
+              ⚠️ Please select a reason for reporting
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label>Description <span class="req">*</span></label>
+            <textarea
+              id="description"
+              placeholder="Describe why you think this job is suspicious. Include specific details like what they asked for, what was promised, etc."
+              maxlength="500"
+              oninput="updateDescCount()"
+            ></textarea>
+            <div class="char-count">
+              <span id="descCount">0</span> / 500 characters (minimum 10)
+            </div>
+            <div class="field-error" id="descError">
+              ⚠️ Description must be between 10 and 500 characters
+            </div>
+          </div>
+
+          <!-- Job Text (optional) -->
+          <div class="form-group">
+            <label
+              >Job Description Text
+              <span class="optional-tag">(optional)</span></label
+            >
+            <textarea
+              id="jobText"
+              placeholder="Paste the suspicious job description here..."
+              style="min-height: 80px"
+            ></textarea>
+          </div>
+
+          <!-- URL (optional) -->
+          <div class="form-group">
+            <label
+              >Job Posting URL
+              <span class="optional-tag">(optional)</span></label
+            >
+            <input
+              type="text"
+              id="jobUrl"
+              placeholder="https://example.com/job-post"
+            />
+          </div>
+
+          <button class="btn-submit" onclick="submitReport()" id="submitBtn">
+            🚨 Submit Report
+          </button>
+        </div>
+
+        <!-- Success Box -->
+        <div class="success-box" id="successBox">
+          <div class="success-icon">✅</div>
+          <h3>Report Submitted Successfully!</h3>
+          <p>Your Report ID:</p>
+          <div class="report-id" id="reportId">RPT-0000</div>
+          <p>Thank you for helping protect the community.</p>
+          <p style="margin-top: 8px">
+            Our admin team will review your report within 24 hours.
+          </p>
+          <button class="btn-another" onclick="resetForm()">
+            📋 Submit Another Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Reports -->
+      <div class="reports-card">
+        <div class="reports-header">
+          <h3>📊 Community Reports</h3>
+          <p>Recent reports submitted by users</p>
+        </div>
+        <div id="reportsList">
+          <div class="empty-state">
+            <h4>⏳ Loading reports...</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://127.0.0.1:5000";
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!localStorage.getItem("token")) {
+          window.location.href = "Login.html";
+          return;
+        }
+        document.getElementById("userName").textContent =
+          localStorage.getItem("userName") || "User";
+        loadReports();
+      });
+
+      function updateDescCount() {
+        const val = document.getElementById("description").value.length;
+        document.getElementById("descCount").textContent = val;
+      }
+
+      // ── Submit Report → FR7 Backend API ──
+      async function submitReport() {
+        // Clear errors
+        document
+          .querySelectorAll(".field-error")
+          .forEach((e) => e.classList.remove("show"));
+        document.getElementById("errorAlert").classList.remove("show");
+
+        const reason = document.getElementById("reason").value;
+        const description = document.getElementById("description").value.trim();
+        const jobText = document.getElementById("jobText").value.trim();
+        const jobUrl = document.getElementById("jobUrl").value.trim();
+
+        let hasError = false;
+
+        if (!reason) {
+          document.getElementById("reasonError").classList.add("show");
+          hasError = true;
+        }
+        if (description.length < 10 || description.length > 500) {
+          document.getElementById("descError").classList.add("show");
+          hasError = true;
+        }
+        if (hasError) return;
+
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+        try {
+          const response = await fetch(`${API_BASE}/job/report`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              reason,
+              description,
+              job_text: jobText,
+              url: jobUrl,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            document.getElementById("reportId").textContent = data.report_id;
+            document.getElementById("reportForm").style.display = "none";
+            document.getElementById("successBox").classList.add("show");
+            loadReports();
+          } else {
+            const errEl = document.getElementById("errorAlert");
+            errEl.textContent =
+              "❌ " + (data.error || "Submission failed. Please try again.");
+            errEl.classList.add("show");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "🚨 Submit Report";
+          }
+        } catch (error) {
+          const errEl = document.getElementById("errorAlert");
+          errEl.textContent =
+            "❌ Network error. Please check your connection and try again.";
+          errEl.classList.add("show");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "🚨 Submit Report";
+        }
+      }
+
+      // ── Reset Form ──
+      function resetForm() {
+        document.getElementById("reason").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("jobText").value = "";
+        document.getElementById("jobUrl").value = "";
+        document.getElementById("descCount").textContent = "0";
+        document.getElementById("reportForm").style.display = "block";
+        document.getElementById("successBox").classList.remove("show");
+        document.getElementById("submitBtn").disabled = false;
+        document.getElementById("submitBtn").textContent = "🚨 Submit Report";
+      }
+
+      // ── Load Reports from Backend ──
+      async function loadReports() {
+        try {
+          const res = await fetch(`${API_BASE}/job/reports`);
+          const data = await res.json();
+
+          if (data.success) {
+            document.getElementById("totalReports").textContent =
+              data.total_reports || 0;
+            document.getElementById("pendingReports").textContent = data.reports
+              ? data.reports.filter((r) => r.status === "pending").length
+              : 0;
+            renderReports(data.reports || []);
+          }
+        } catch (err) {
+          document.getElementById("reportsList").innerHTML = `
+            <div class="empty-state">
+              <h4>📭 No reports yet</h4>
+              <p>Be the first to report a suspicious job!</p>
+            </div>`;
+        }
+      }
+
+      function renderReports(reports) {
+        const container = document.getElementById("reportsList");
+        if (!reports || reports.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h4>📭 No reports yet</h4>
+              <p>Be the first to report a suspicious job posting!</p>
+            </div>`;
+          return;
+        }
+
+        const icons = {
+          "Payment Required": "💰",
+          "Personal Information Theft": "🔐",
+          "Fake Company": "🏢",
+          "Too Good To Be True": "💸",
+          "Suspicious URL": "🔗",
+          "Duplicate Posting": "📋",
+          Other: "📝",
+        };
+
+        // Show last 5 reports
+        const recent = [...reports].reverse().slice(0, 5);
+        container.innerHTML = recent
+          .map(
+            (r) => `
+          <div class="report-item">
+            <div class="r-icon">${icons[r.reason] || "📝"}</div>
+            <div class="r-content">
+              <div class="r-id">${r.id} &nbsp; <span class="badge-pending">${r.status}</span></div>
+              <div class="r-reason">${r.reason}</div>
+              <div class="r-desc">${(r.description || "").substring(0, 80)}${r.description && r.description.length > 80 ? "..." : ""}</div>
+            </div>
+            <div class="r-time">${r.reported_at ? new Date(r.reported_at).toLocaleDateString() : "—"}</div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "Login.html";
+        }
+      }
+    </script>
+  </body>
+</html>

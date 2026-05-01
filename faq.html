@@ -1,0 +1,1157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ & Help - JobDetect</title>
+    <link rel="stylesheet" href="../services/home.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f4ff;
+        color: #1a1a2e;
+      }
+      .navbar {
+        background: white;
+        padding: 16px 0;
+        box-shadow: 0 2px 20px rgba(45, 62, 135, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+      .nav-brand h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-menu a:hover {
+        color: #2d3e87;
+      }
+      .btn-outline {
+        border: 2px solid #2d3e87;
+        color: #2d3e87 !important;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600 !important;
+        transition: all 0.3s !important;
+      }
+      .btn-outline:hover {
+        background: #2d3e87;
+        color: white !important;
+      }
+      .faq-hero {
+        background: linear-gradient(135deg, #2d3e87 0%, #1a2560 100%);
+        padding: 60px 24px;
+        text-align: center;
+        color: white;
+      }
+      .faq-hero h2 {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .faq-hero p {
+        font-size: 18px;
+        opacity: 0.85;
+        margin-bottom: 32px;
+      }
+      .search-box {
+        max-width: 560px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 16px 56px 16px 20px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        outline: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+      .search-box button {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #f47458;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .search-box button:hover {
+        background: #e05e3f;
+      }
+      .faq-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 24px;
+      }
+      .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 48px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+      }
+      .stat-card .stat-number {
+        font-size: 36px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .stat-card .stat-label {
+        color: #666;
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      .category-filters {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+      }
+      .filter-btn {
+        padding: 10px 20px;
+        border: 2px solid #e0e7ff;
+        border-radius: 50px;
+        background: white;
+        color: #555;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: #2d3e87;
+        color: white;
+        border-color: #2d3e87;
+      }
+      .results-count {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      .results-count span {
+        color: #2d3e87;
+        font-weight: 700;
+      }
+      .faq-section {
+        margin-bottom: 40px;
+      }
+      .faq-section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3e87;
+      }
+      .faq-section-title .section-icon {
+        width: 40px;
+        height: 40px;
+        background: #e8f0fe;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .faq-item {
+        background: white;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 12px rgba(45, 62, 135, 0.06);
+        overflow: hidden;
+        border: 1px solid #e8f0fe;
+        transition: box-shadow 0.3s;
+      }
+      .faq-item:hover {
+        box-shadow: 0 4px 20px rgba(45, 62, 135, 0.12);
+      }
+      .faq-item.hidden {
+        display: none;
+      }
+      .faq-question {
+        width: 100%;
+        padding: 20px 24px;
+        background: none;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        text-align: left;
+        gap: 16px;
+      }
+      .faq-question-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a2e;
+        line-height: 1.4;
+      }
+      .faq-question-text mark {
+        background: #fff3cd;
+        border-radius: 3px;
+        padding: 0 2px;
+      }
+      .faq-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        background: #e8f0fe;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #2d3e87;
+        font-weight: 700;
+        transition: all 0.3s;
+      }
+      .faq-item.open .faq-icon {
+        background: #2d3e87;
+        color: white;
+        transform: rotate(45deg);
+      }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.4s ease,
+          padding 0.3s ease;
+      }
+      .faq-item.open .faq-answer {
+        max-height: 500px;
+      }
+      .faq-answer-inner {
+        padding: 16px 24px 20px 24px;
+        color: #444;
+        line-height: 1.7;
+        font-size: 15px;
+        border-top: 1px solid #f0f4ff;
+      }
+      .faq-answer-inner ul {
+        margin: 10px 0 0 20px;
+      }
+      .faq-answer-inner ul li {
+        margin-bottom: 6px;
+      }
+      .faq-answer-inner .tip-box {
+        background: #f0f4ff;
+        border-left: 4px solid #2d3e87;
+        padding: 12px 16px;
+        border-radius: 0 8px 8px 0;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .faq-answer-inner .warning-box {
+        background: #fff3f0;
+        border-left: 4px solid #f47458;
+        padding: 12px 16px;
+        border-radius: 0 8px 8px 0;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        display: none;
+      }
+      .no-results.show {
+        display: block;
+      }
+      .no-results h3 {
+        font-size: 22px;
+        color: #2d3e87;
+        margin-bottom: 8px;
+      }
+      .no-results p {
+        color: #666;
+      }
+      .contact-section {
+        background: linear-gradient(135deg, #2d3e87, #f47458);
+        border-radius: 24px;
+        padding: 48px;
+        text-align: center;
+        color: white;
+        margin-top: 48px;
+      }
+      .contact-section h3 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .contact-section p {
+        opacity: 0.9;
+        margin-bottom: 28px;
+        font-size: 16px;
+      }
+      .contact-btn {
+        display: inline-block;
+        background: white;
+        color: #2d3e87;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 16px;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .contact-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      @media (max-width: 768px) {
+        .faq-hero h2 {
+          font-size: 28px;
+        }
+        .stats-bar {
+          grid-template-columns: 1fr;
+        }
+        .contact-section {
+          padding: 32px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <header class="navbar">
+      <div class="container">
+        <a href="home.html" class="nav-brand">
+          <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+              <path
+                d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+                stroke="#2D3E87"
+                stroke-width="2"
+                fill="none"
+              />
+              <circle cx="20" cy="20" r="3" fill="#F47458" />
+            </svg>
+          </div>
+          <h1>JobDetect</h1>
+        </a>
+        <nav class="nav-menu">
+          <a href="detect.html">Detect Jobs</a>
+          <a href="history.html">History</a>
+          <a href="awareness.html">Awareness</a>
+          <a href="report.html">Report Job</a>
+          <a href="faq.html" style="color: #2d3e87; font-weight: 700">FAQ</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="faq-hero">
+      <h2>❓ FAQ & Help Center</h2>
+      <p>Find answers to all your questions about fake job detection</p>
+      <div class="search-box">
+        <input
+          type="text"
+          id="faqSearch"
+          placeholder="Search... e.g. how to identify fake jobs"
+          oninput="searchFAQ()"
+        />
+        <button onclick="searchFAQ()">Search</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="faq-container">
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-number">97%</div>
+          <div class="stat-label">Model Accuracy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="faqCount">20</div>
+          <div class="stat-label">Total FAQs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Detection Methods</div>
+        </div>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="category-filters">
+        <button class="filter-btn active" onclick="filterCategory('all', this)">
+          📋 All
+        </button>
+        <button class="filter-btn" onclick="filterCategory('general', this)">
+          ℹ️ General
+        </button>
+        <button class="filter-btn" onclick="filterCategory('detection', this)">
+          🔍 Detection
+        </button>
+        <button class="filter-btn" onclick="filterCategory('account', this)">
+          👤 Account
+        </button>
+        <button class="filter-btn" onclick="filterCategory('safety', this)">
+          🛡️ Safety Tips
+        </button>
+        <button class="filter-btn" onclick="filterCategory('technical', this)">
+          ⚙️ Technical
+        </button>
+      </div>
+
+      <!-- Results Count -->
+      <div class="results-count" id="resultsCount">
+        Showing <span id="visibleCount">20</span> of <span>20</span> questions
+      </div>
+
+      <!-- No Results -->
+      <div class="no-results" id="noResults">
+        <h3>🔍 No results found</h3>
+        <p>Try different keywords or browse all categories</p>
+      </div>
+
+      <!-- ========== SECTION 1: General ========== -->
+      <div class="faq-section" data-category="general">
+        <div class="faq-section-title">
+          <div class="section-icon">ℹ️</div>
+          General Questions
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What is JobDetect and how does it work?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              JobDetect is an AI-powered system that detects fake job postings
+              using 3 methods:
+              <ul>
+                <li>
+                  <strong>Text Detection:</strong> Paste the job description —
+                  AI will analyze it
+                </li>
+                <li>
+                  <strong>Image Detection:</strong> Upload a screenshot of the
+                  job posting
+                </li>
+                <li>
+                  <strong>URL Verification:</strong> Check the job site link
+                </li>
+              </ul>
+              <div class="tip-box">
+                💡 Our ML model is trained on 17,000+ real and fake jobs and
+                delivers 97%+ accuracy!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Is this system free to use?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! JobDetect is completely free. Simply register once and
+              perform unlimited detections. Our goal is to protect people from
+              fake job scams.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >How common are fake job postings?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Fake job postings are very common, especially on online platforms.
+              According to research:
+              <ul>
+                <li>40%+ job ads on WhatsApp and Facebook are suspicious</li>
+                <li>
+                  Registration fees are often demanded — this is a red flag
+                </li>
+                <li>
+                  Unrealistic salary promises (e.g. $5000/week) are very common
+                  scams
+                </li>
+              </ul>
+              <div class="warning-box">
+                ⚠️ No legitimate company ever asks for money before hiring!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Is my data safe on JobDetect?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! Your data is completely secure:
+              <ul>
+                <li>Passwords are secured with bcrypt encryption</li>
+                <li>Authentication is handled via JWT tokens</li>
+                <li>Data is safely stored in MongoDB</li>
+                <li>Your data is never shared with any third party</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SECTION 2: Detection ========== -->
+      <div class="faq-section" data-category="detection">
+        <div class="faq-section-title">
+          <div class="section-icon">🔍</div>
+          About Detection
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What is the minimum character requirement for text
+              detection?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Minimum <strong>50 characters</strong> and maximum
+              <strong>5000 characters</strong> are required. More text means
+              more accurate results.
+              <div class="tip-box">
+                💡 For best results, paste the complete job description —
+                include title, requirements, and benefits!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Which image formats are supported for image detection?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              These formats are supported:
+              <ul>
+                <li>JPG / JPEG</li>
+                <li>PNG</li>
+              </ul>
+              Maximum size: <strong>5MB</strong>
+              <div class="tip-box">
+                💡 Take a clear, high-resolution screenshot — blurry images
+                prevent OCR from reading text accurately!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What does the risk score mean? Low, Medium, High?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              The risk score shows the probability that a job posting is fake:
+              <ul>
+                <li>
+                  🟢 <strong>0-30% — Low Risk:</strong> Job is likely real, but
+                  still verify independently
+                </li>
+                <li>
+                  🟡 <strong>31-70% — Medium Risk:</strong> Suspicious
+                  indicators present, check carefully
+                </li>
+                <li>
+                  🔴 <strong>71-100% — High Risk:</strong> Job is highly
+                  suspicious, avoid immediately!
+                </li>
+              </ul>
+              <div class="warning-box">
+                ⚠️ Low risk does not mean 100% safe — always verify the company
+                independently!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What does URL verification check?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              URL verification checks the following:
+              <ul>
+                <li>
+                  🔒 <strong>SSL Certificate:</strong> Whether the website is
+                  secure
+                </li>
+                <li>📅 <strong>Domain Age:</strong> New domain = suspicious</li>
+                <li>
+                  📋 <strong>WHOIS Data:</strong> Domain owner information
+                </li>
+                <li>
+                  🚫 <strong>Blacklist:</strong> Whether it appears in known
+                  scam databases
+                </li>
+                <li>
+                  ⭐ <strong>Trust Score:</strong> Overall safety score from 0
+                  to 100
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What is the model accuracy and how was it calculated?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Our <strong>Random Forest model</strong> achieves
+              <strong>97.47%</strong> accuracy.
+              <ul>
+                <li>Dataset: 17,880 real and fake job postings (Kaggle)</li>
+                <li>Training: 80% data for training, 20% for testing</li>
+                <li>Features: TF-IDF vectorization (1500 features)</li>
+                <li>
+                  5 models compared: Naive Bayes, Logistic Regression, Decision
+                  Tree, Random Forest, SVM
+                </li>
+              </ul>
+              <div class="tip-box">
+                💡 Random Forest achieved the best F1-Score and was therefore
+                selected!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="detection">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Can Urdu or Roman Urdu job descriptions be detected?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Currently our model is optimized for
+              <strong>English text</strong> because the training dataset was in
+              English. Roman Urdu may partially work. Pure Urdu (Arabic script)
+              results will not be accurate.
+              <div class="tip-box">
+                💡 For best results, use English text or translate the job
+                description before pasting!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SECTION 3: Account ========== -->
+      <div class="faq-section" data-category="account">
+        <div class="faq-section-title">
+          <div class="section-icon">👤</div>
+          About Your Account
+        </div>
+
+        <div class="faq-item" data-category="account">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I register?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Registration is very simple:
+              <ul>
+                <li>Go to the Register page</li>
+                <li>Enter your name, email, and password</li>
+                <li>
+                  Password must contain at least 1 uppercase letter and 1 number
+                </li>
+                <li>Click Submit — that's it!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="account">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What should I do if I forget my password?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Password reset is not currently available — it will be added in a
+              future update. For now, you will need to create a new account.
+              <div class="tip-box">
+                💡 Use a password manager like LastPass or Google Password
+                Manager to remember your passwords!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="account">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Where can I view my verification history?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Click the <strong>"History"</strong> link in the navigation bar.
+              There you will find all your past detections with timestamps,
+              results, and risk scores.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SECTION 4: Safety ========== -->
+      <div class="faq-section" data-category="safety">
+        <div class="faq-section-title">
+          <div class="section-icon">🛡️</div>
+          Safety Tips
+        </div>
+
+        <div class="faq-item" data-category="safety">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What are the warning signs of a fake job?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              These are the most common red flags:
+              <ul>
+                <li>
+                  💰 <strong>Asking for money:</strong> "Registration fee",
+                  "training fee" — NEVER pay!
+                </li>
+                <li>
+                  💸 <strong>Unrealistic salary:</strong> "$5000/week, no
+                  experience needed" — impossible
+                </li>
+                <li>
+                  📱 <strong>WhatsApp/personal email:</strong> Legitimate
+                  companies use official email addresses
+                </li>
+                <li>
+                  ⚡ <strong>Urgent hiring:</strong> "Apply within 24 hours!" —
+                  pressure tactic
+                </li>
+                <li>
+                  🏢 <strong>Vague company info:</strong> No company name,
+                  address, or phone number
+                </li>
+                <li>
+                  📝 <strong>No interview:</strong> Job offer without any
+                  interview — highly suspicious!
+                </li>
+              </ul>
+              <div class="warning-box">
+                ⚠️ If even one red flag exists — STOP and verify before
+                proceeding!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="safety">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What should I do if I find a fake job?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Follow these steps immediately:
+              <ul>
+                <li>
+                  1️⃣ <strong>Report on JobDetect</strong> — click the "Report
+                  This Job" button
+                </li>
+                <li>
+                  2️⃣ <strong>Report on the platform</strong> — flag it on
+                  Facebook, LinkedIn, etc.
+                </li>
+                <li>
+                  3️⃣ <strong>File a complaint with FIA Cybercrime</strong> —
+                  <strong>0800-02345</strong>
+                </li>
+                <li>
+                  4️⃣ <strong>Warn your friends and family</strong> — spread
+                  awareness!
+                </li>
+              </ul>
+              <div class="tip-box">
+                💡 If you already made a payment, immediately contact your bank
+                and report the transaction!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="safety">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What are the best platforms for safe job searching?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Trusted job platforms:
+              <ul>
+                <li>
+                  ✅ <strong>rozee.pk</strong> — Pakistan's largest job portal
+                </li>
+                <li>
+                  ✅ <strong>LinkedIn</strong> — Professional network with
+                  verified companies
+                </li>
+                <li>
+                  ✅ <strong>indeed.com</strong> — Global platform with user
+                  reviews
+                </li>
+                <li>
+                  ✅ <strong>glassdoor.com</strong> — Includes company reviews
+                  and ratings
+                </li>
+                <li>
+                  ✅ <strong>Company website directly</strong> — Always the
+                  safest option!
+                </li>
+              </ul>
+              <div class="warning-box">
+                ⚠️ Be extra careful when applying through WhatsApp groups and
+                Facebook pages!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="safety">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What personal information should I never share when applying for
+              a job?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              NEVER share this information — especially during initial stages:
+              <ul>
+                <li>🚫 National ID / Passport number</li>
+                <li>🚫 Bank account details</li>
+                <li>🚫 Credit or Debit card information</li>
+                <li>🚫 Passwords or PINs</li>
+                <li>🚫 OTP or verification codes</li>
+              </ul>
+              <div class="tip-box">
+                💡 Only your name, email, phone number, and skills are needed in
+                a CV — your ID number is never required at the application
+                stage!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== SECTION 5: Technical ========== -->
+      <div class="faq-section" data-category="technical">
+        <div class="faq-section-title">
+          <div class="section-icon">⚙️</div>
+          Technical Questions
+        </div>
+
+        <div class="faq-item" data-category="technical">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Which AI model is used for detection?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Our system uses a <strong>Random Forest Classifier</strong> which:
+              <ul>
+                <li>Extracts text features using TF-IDF vectorization</li>
+                <li>Was selected from 5 models based on the best F1-Score</li>
+                <li>Handles imbalanced data using class_weight='balanced'</li>
+                <li>Trained on Kaggle dataset: 17,880 job postings</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="technical">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >The system is running slow — what should I do?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              If the system is slow, try the following:
+              <ul>
+                <li>🔄 Refresh the page</li>
+                <li>🌐 Check your internet connection</li>
+                <li>
+                  💻 Make sure the backend server is running — run
+                  <code>py app.py</code> in the terminal
+                </li>
+                <li>🧹 Clear your browser cache</li>
+              </ul>
+              <div class="tip-box">
+                💡 URL verification may be slower as it performs live internet
+                checks in real time!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="technical">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Getting an error in OCR image detection — what is the
+              solution?</span
+            >
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Common solutions for OCR errors:
+              <ul>
+                <li>
+                  📸 <strong>Use a clear image:</strong> Blurry images cause OCR
+                  to fail
+                </li>
+                <li>
+                  📏 <strong>Good resolution:</strong> Minimum 800px width is
+                  recommended
+                </li>
+                <li>
+                  💡 <strong>Good lighting:</strong> Avoid dark or low-contrast
+                  screenshots
+                </li>
+                <li>
+                  📄 <strong>Text must be visible:</strong> Ensure good contrast
+                  between text and background
+                </li>
+              </ul>
+              <div class="tip-box">
+                💡 If image detection is not working, copy the text and use Text
+                Detection instead!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="contact-section">
+        <h3>🤝 Need More Help?</h3>
+        <p>
+          If your question is not listed here, go to the detect page and get
+          started
+        </p>
+        <a href="detect.html" class="contact-btn">🔍 Detect a Job</a>
+      </div>
+    </div>
+
+    <script>
+      function toggleFAQ(btn) {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains("open");
+        document
+          .querySelectorAll(".faq-item")
+          .forEach((i) => i.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      }
+
+      function searchFAQ() {
+        const query = document
+          .getElementById("faqSearch")
+          .value.toLowerCase()
+          .trim();
+        const items = document.querySelectorAll(".faq-item");
+        const sections = document.querySelectorAll(".faq-section");
+        let visibleCount = 0;
+
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.querySelector(".filter-btn").classList.add("active");
+
+        items.forEach((item) => {
+          const questionText = item
+            .querySelector(".faq-question-text")
+            .textContent.toLowerCase();
+          const answerText = item
+            .querySelector(".faq-answer-inner")
+            .textContent.toLowerCase();
+          const matches =
+            query === "" ||
+            questionText.includes(query) ||
+            answerText.includes(query);
+          item.classList.toggle("hidden", !matches);
+
+          const questionEl = item.querySelector(".faq-question-text");
+          if (query && matches) {
+            const original =
+              questionEl.getAttribute("data-original") ||
+              questionEl.textContent;
+            questionEl.setAttribute("data-original", original);
+            questionEl.innerHTML = original.replace(
+              new RegExp(`(${query})`, "gi"),
+              "<mark>$1</mark>",
+            );
+          } else {
+            const original = questionEl.getAttribute("data-original");
+            if (original) questionEl.textContent = original;
+          }
+          if (matches) visibleCount++;
+        });
+
+        sections.forEach((section) => {
+          const hasVisible = [...section.querySelectorAll(".faq-item")].some(
+            (item) => !item.classList.contains("hidden"),
+          );
+          section.style.display = hasVisible ? "" : "none";
+        });
+
+        document
+          .getElementById("noResults")
+          .classList.toggle("show", visibleCount === 0);
+        document.getElementById("visibleCount").textContent = visibleCount;
+      }
+
+      function filterCategory(category, btn) {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("faqSearch").value = "";
+
+        const items = document.querySelectorAll(".faq-item");
+        const sections = document.querySelectorAll(".faq-section");
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+          const itemCategory = item.getAttribute("data-category");
+          const show = category === "all" || itemCategory === category;
+          item.classList.toggle("hidden", !show);
+          const questionEl = item.querySelector(".faq-question-text");
+          const original = questionEl.getAttribute("data-original");
+          if (original) questionEl.textContent = original;
+          if (show) visibleCount++;
+        });
+
+        sections.forEach((section) => {
+          const sectionCategory = section.getAttribute("data-category");
+          section.style.display =
+            category === "all" || sectionCategory === category ? "" : "none";
+        });
+
+        document.getElementById("noResults").classList.remove("show");
+        document.getElementById("visibleCount").textContent = visibleCount;
+      }
+
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "Login.html";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const total = document.querySelectorAll(".faq-item").length;
+        document.getElementById("faqCount").textContent = total;
+        document.getElementById("visibleCount").textContent = total;
+        document.querySelector(".results-count").innerHTML =
+          `Showing <span id="visibleCount">${total}</span> of <span>${total}</span> questions`;
+      });
+    </script>
+  </body>
+</html>

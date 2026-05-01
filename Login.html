@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - JobDetect</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #2d3e87 0%, #1a2847 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .login-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+      }
+
+      .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        background: #2d3e87;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo svg {
+        width: 50px;
+        height: 50px;
+      }
+
+      h2 {
+        color: #2d3e87;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #e5e5e5;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #2d3e87;
+      }
+
+      .error-message {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: #2d3e87;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+      }
+
+      .btn-login:hover {
+        background: #1a2847;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(45, 62, 135, 0.3);
+      }
+
+      .btn-login:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .divider {
+        text-align: center;
+        margin: 25px 0;
+        color: #999;
+        position: relative;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background: #e5e5e5;
+      }
+
+      .divider::before {
+        left: 0;
+      }
+      .divider::after {
+        right: 0;
+      }
+
+      .signup-link {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .signup-link a {
+        color: #2d3e87;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      .success-message {
+        background: #dcfce7;
+        color: #16a34a;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="logo-section">
+        <div class="logo">
+          <svg viewBox="0 0 50 50" fill="none">
+            <circle cx="25" cy="25" r="20" fill="white" opacity="0.3" />
+            <path
+              d="M25 10 L25 40 M15 20 L35 20 M15 30 L35 30"
+              stroke="white"
+              stroke-width="3"
+            />
+            <circle cx="25" cy="25" r="4" fill="#F47458" />
+          </svg>
+        </div>
+        <h2>Welcome Back!</h2>
+        <p class="subtitle">Login to detect fake jobs</p>
+      </div>
+
+      <!-- Success Message -->
+      <div id="successMessage" class="success-message">
+        Login successful! Redirecting...
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="your.email@example.com"
+            required
+          />
+          <div id="emailError" class="error-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+          <div id="passwordError" class="error-message"></div>
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn-login">Login</button>
+      </form>
+
+      <div class="divider">OR</div>
+
+      <div class="signup-link">
+        Don't have an account?
+        <a href="Register.html">Sign Up</a>
+      </div>
+    </div>
+
+    <!-- Include API -->
+    <script src="../services/api.js"></script>
+
+    <script>
+      // Form submission handler
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Get form values
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+
+          // Clear previous errors
+          document.getElementById("emailError").classList.remove("show");
+          document.getElementById("passwordError").classList.remove("show");
+
+          // Basic validation
+          if (!email) {
+            showError("emailError", "Email is required");
+            return;
+          }
+
+          if (!validateEmail(email)) {
+            showError("emailError", "Please enter a valid email address");
+            return;
+          }
+
+          if (!password) {
+            showError("passwordError", "Password is required");
+            return;
+          }
+
+          if (password.length < 6) {
+            showError(
+              "passwordError",
+              "Password must be at least 6 characters"
+            );
+            return;
+          }
+
+          // Disable button during request
+          const loginBtn = document.getElementById("loginBtn");
+          loginBtn.disabled = true;
+          loginBtn.textContent = "Logging in...";
+
+          try {
+            // Call login API
+            const response = await loginUser({
+              email: email,
+              password: password,
+            });
+
+            // Check for errors
+            if (response.error) {
+              showError("passwordError", response.error);
+              loginBtn.disabled = false;
+              loginBtn.textContent = "Login";
+              return;
+            }
+
+            // Success! Store token and user info
+            if (response.token) {
+              localStorage.setItem("token", response.token);
+              localStorage.setItem("userName", response.user.name || "User");
+              localStorage.setItem("userEmail", response.user.email || email);
+
+              // Show success message
+              document.getElementById("successMessage").classList.add("show");
+
+              // Redirect to detection page after 1 second
+              setTimeout(() => {
+                window.location.href = "detect.html";
+              }, 1000);
+            } else {
+              showError("passwordError", "Login failed. Please try again.");
+              loginBtn.disabled = false;
+              loginBtn.textContent = "Login";
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            showError(
+              "passwordError",
+              "Network error. Please check your connection."
+            );
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Login";
+          }
+        });
+
+      // Helper function to show errors
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.classList.add("show");
+      }
+
+      // Email validation
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      // Check if already logged in
+      if (localStorage.getItem("token")) {
+        window.location.href = "detect.html";
+      }
+    </script>
+  </body>
+</html>
