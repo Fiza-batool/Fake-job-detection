@@ -1,0 +1,90 @@
+======================================================================
+AI-BASED FAKE JOB DETECTION - TRAINING REPORT
+University of Education - Final Year Project 2026
+======================================================================
+
+FIXES APPLIED IN THIS VERSION:
+----------------------------------------------------------------------
+1. class_weight='balanced' — imbalanced dataset fix
+   Dataset: real majority, fake minority
+   Fix: Fake jobs get higher weight during training
+   Result: Fake jobs now correctly get HIGH risk scores
+
+2. F1-Score for best model selection (was accuracy before)
+   Reason: Accuracy is misleading for imbalanced datasets
+   F1 considers both precision and recall
+
+3. Enhanced Dataset (final_dataset.csv)
+   Old: fake_job_postings.csv — Kaggle 2014 only
+   New: final_dataset.csv — Kaggle + Pakistani + Modern
+   Added 250 Pakistani fake job descriptions
+   Added 250 modern real job descriptions
+   Removed 2000 extra real jobs for better balance
+
+DATASET INFORMATION:
+----------------------------------------------------------------------
+Dataset File: final_dataset.csv
+Dataset Info: Kaggle + 250 Pakistani Fake + 250 Modern Real
+Original Dataset Size: 16,055
+Used for Training: 15,000
+Real Jobs: 13,634 (84.92%)
+Fake Jobs: 2,421 (15.08%)
+Training Samples: 12,000
+Testing Samples: 3,000
+Feature Dimensions: 1,500
+Class Weight: balanced
+Best Model Selection: F1-Score
+
+======================================================================
+MODEL COMPARISON:
+======================================================================
+              Model Accuracy Precision  Recall F1-Score   Time
+        Naive Bayes   95.50%    99.07%  70.73%   82.54%  0.03s
+Logistic Regression   96.80%    87.37%  92.02%   89.63%  0.23s
+      Decision Tree   95.47%    85.55%  84.04%   84.79%  2.60s
+      Random Forest   97.17%    99.73%  81.37%   89.62%  1.45s
+       SVM (Linear)   15.03%    15.03% 100.00%   26.14% 14.72s
+
+======================================================================
+BEST MODEL: Logistic Regression
+======================================================================
+Accuracy:  96.80%
+Precision: 87.37%
+Recall:    92.02%  (fake detection rate)
+F1-Score:  89.63%  (selection criteria)
+Training Time: 0.23 seconds
+
+CONFUSION MATRIX:
+----------------------------------------------------------------------
+                Predicted
+              Real    Fake
+Actual Real   2489      60
+       Fake     36     415
+
+DETAILED METRICS:
+----------------------------------------------------------------------
+TP:   415  Fake jobs correctly identified
+TN:  2489  Real jobs correctly identified
+FP:    60  Real jobs incorrectly flagged
+FN:    36  Fake jobs missed
+
+Sensitivity (Recall): 92.02%
+Specificity:          97.65%
+False Positive Rate:  2.35%
+False Negative Rate:  7.98%
+
+======================================================================
+CLASSIFICATION REPORT:
+======================================================================
+              precision    recall  f1-score   support
+
+    Real Job       0.99      0.98      0.98      2549
+    Fake Job       0.87      0.92      0.90       451
+
+    accuracy                           0.97      3000
+   macro avg       0.93      0.95      0.94      3000
+weighted avg       0.97      0.97      0.97      3000
+
+======================================================================
+Report Generated: 2026-04-26 00:38:40
+======================================================================
