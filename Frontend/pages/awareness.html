@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Awareness & Safety - JobDetect</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f0f4ff;
+        color: #1a1a2e;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: white;
+        padding: 16px 0;
+        box-shadow: 0 2px 20px rgba(45, 62, 135, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+      .nav-brand h1 {
+        font-size: 24px;
+        font-weight: 800;
+        color: #2d3e87;
+      }
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: #555;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-menu a:hover {
+        color: #2d3e87;
+      }
+      .nav-menu .active-link {
+        color: #2d3e87;
+        font-weight: 700;
+      }
+      .btn-outline {
+        border: 2px solid #2d3e87;
+        color: #2d3e87 !important;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: 600 !important;
+      }
+      .btn-outline:hover {
+        background: #2d3e87;
+        color: white !important;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        padding: 60px 24px;
+        text-align: center;
+        color: white;
+      }
+      .hero h2 {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .hero p {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Container */
+      .main-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 24px;
+      }
+
+      /* Alert Banner */
+      .alert-banner {
+        background: #fef3c7;
+        border: 2px solid #f59e0b;
+        border-radius: 16px;
+        padding: 20px 28px;
+        margin-bottom: 36px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .alert-banner .alert-icon {
+        font-size: 36px;
+      }
+      .alert-banner h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 4px;
+      }
+      .alert-banner p {
+        color: #92400e;
+        font-size: 14px;
+      }
+
+      /* Section Title */
+      .section-title {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1a2847;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* Red Flags Grid */
+      .red-flags-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+      .red-flag-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(220, 38, 38, 0.08);
+        border-left: 5px solid #dc2626;
+        transition: transform 0.3s;
+      }
+      .red-flag-card:hover {
+        transform: translateY(-4px);
+      }
+      .red-flag-card .flag-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+      }
+      .red-flag-card h4 {
+        font-size: 17px;
+        font-weight: 700;
+        color: #991b1b;
+        margin-bottom: 8px;
+      }
+      .red-flag-card p {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      /* Safety Tips */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+      .tip-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        border-top: 4px solid #2d3e87;
+        text-align: center;
+        transition: transform 0.3s;
+      }
+      .tip-card:hover {
+        transform: translateY(-4px);
+      }
+      .tip-card .tip-icon {
+        font-size: 40px;
+        margin-bottom: 14px;
+      }
+      .tip-card h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1a2847;
+        margin-bottom: 8px;
+      }
+      .tip-card p {
+        color: #555;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      /* Checklist */
+      .checklist-card {
+        background: white;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        margin-bottom: 48px;
+      }
+      .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f4ff;
+      }
+      .checklist-item:last-child {
+        border-bottom: none;
+      }
+      .checklist-item input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: #dc2626;
+      }
+      .checklist-item label {
+        font-size: 15px;
+        color: #333;
+        cursor: pointer;
+        line-height: 1.5;
+      }
+      .checklist-item label strong {
+        color: #dc2626;
+      }
+
+      /* Resources */
+      .resources-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+      .resource-card {
+        background: white;
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 4px 16px rgba(45, 62, 135, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border: 2px solid #e8f0fe;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+      .resource-card:hover {
+        border-color: #2d3e87;
+        transform: translateY(-2px);
+      }
+      .resource-card .resource-icon {
+        font-size: 36px;
+      }
+      .resource-card h4 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1a2847;
+        margin-bottom: 4px;
+      }
+      .resource-card p {
+        font-size: 13px;
+        color: #666;
+      }
+
+      /* CTA */
+      .cta-section {
+        background: linear-gradient(135deg, #dc2626, #1a2847);
+        border-radius: 24px;
+        padding: 48px;
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+      }
+      .cta-section h3 {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .cta-section p {
+        opacity: 0.9;
+        margin-bottom: 28px;
+        font-size: 16px;
+      }
+      .cta-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn-cta-white {
+        background: white;
+        color: #dc2626;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+      .btn-cta-white:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      .btn-cta-outline {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+      .btn-cta-outline:hover {
+        background: white;
+        color: #1a2847;
+        transform: translateY(-3px);
+      }
+
+      /* Emergency */
+      .emergency-box {
+        background: #fee2e2;
+        border: 2px solid #dc2626;
+        border-radius: 16px;
+        padding: 24px 32px;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+      .emergency-box h4 {
+        color: #991b1b;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .emergency-box p {
+        color: #991b1b;
+        font-size: 15px;
+        margin-bottom: 6px;
+      }
+      .emergency-box .hotline {
+        font-size: 28px;
+        font-weight: 800;
+        color: #dc2626;
+        margin: 8px 0;
+      }
+
+      @media (max-width: 768px) {
+        .red-flags-grid,
+        .tips-grid,
+        .resources-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h2 {
+          font-size: 28px;
+        }
+        .cta-section {
+          padding: 32px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container">
+        <a href="home.html" class="nav-brand">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="#2D3E87" opacity="0.2" />
+            <path
+              d="M20 8 L20 32 M12 16 L28 16 M12 24 L28 24"
+              stroke="#2D3E87"
+              stroke-width="2"
+              fill="none"
+            />
+            <circle cx="20" cy="20" r="3" fill="#F47458" />
+          </svg>
+          <h1>JobDetect</h1>
+        </a>
+        <nav class="nav-menu">
+          <span style="color: #555; font-size: 14px"
+            >Welcome, <strong id="userName">User</strong></span
+          >
+          <a href="detect.html">Detect Jobs</a>
+          <a href="awareness.html" class="active-link">Awareness</a>
+          <a href="report.html">Report Job</a>
+          <a href="history.html">History</a>
+          <a href="faq.html">FAQ</a>
+          <a href="feedback.html">Feedback</a>
+          <a href="#" onclick="logout()" class="btn-outline">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h2>🛡️ Awareness & Safety Center</h2>
+      <p>
+        Learn how to identify fake job scams and protect yourself from
+        employment fraud
+      </p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+      <!-- Alert Banner -->
+      <div class="alert-banner">
+        <div class="alert-icon">⚠️</div>
+        <div>
+          <h3>Stay Alert — Fake Jobs Are Everywhere!</h3>
+          <p>
+            According to research, over 40% of job ads on WhatsApp and Facebook
+            are suspicious. Use our detection system and follow these safety
+            guidelines to protect yourself.
+          </p>
+        </div>
+      </div>
+
+      <!-- Red Flags Section -->
+      <div class="section-title">🚩 Common Red Flags of Fake Jobs</div>
+      <div class="red-flags-grid">
+        <div class="red-flag-card">
+          <div class="flag-icon">💰</div>
+          <h4>Asking for Money</h4>
+          <p>
+            Any job that asks for a "registration fee", "training fee", or
+            "security deposit" is a scam. Legitimate employers NEVER ask for
+            money before hiring.
+          </p>
+        </div>
+        <div class="red-flag-card">
+          <div class="flag-icon">💸</div>
+          <h4>Unrealistic Salary</h4>
+          <p>
+            Promises like "Earn Rs. 50,000 daily" or "$5000/week with no
+            experience" are impossible. If it sounds too good to be true — it
+            is!
+          </p>
+        </div>
+        <div class="red-flag-card">
+          <div class="flag-icon">📱</div>
+          <h4>WhatsApp / Personal Email</h4>
+          <p>
+            Legitimate companies use official email addresses (e.g.
+            hr@company.com). Jobs advertised only via WhatsApp or Gmail are
+            highly suspicious.
+          </p>
+        </div>
+        <div class="red-flag-card">
+          <div class="flag-icon">⚡</div>
+          <h4>Extreme Urgency</h4>
+          <p>
+            "Apply within 24 hours!" or "Last 2 seats remaining!" are pressure
+            tactics used by scammers to prevent you from thinking carefully.
+          </p>
+        </div>
+        <div class="red-flag-card">
+          <div class="flag-icon">🏢</div>
+          <h4>Vague Company Information</h4>
+          <p>
+            No company name, no physical address, no phone number — these are
+            major red flags. Always verify the company exists before applying.
+          </p>
+        </div>
+        <div class="red-flag-card">
+          <div class="flag-icon">📝</div>
+          <h4>No Interview Required</h4>
+          <p>
+            Receiving a job offer without any interview or verification process
+            is highly suspicious. Real companies always interview candidates
+            first.
+          </p>
+        </div>
+      </div>
+
+      <!-- Safety Tips -->
+      <div class="section-title">✅ Safety Tips to Protect Yourself</div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">🔍</div>
+          <h4>Verify Before Applying</h4>
+          <p>
+            Always search for the company on Google, LinkedIn, and official
+            websites before sending your CV or any personal information.
+          </p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🔒</div>
+          <h4>Never Share Sensitive Info</h4>
+          <p>
+            Do not share your CNIC, bank details, passwords, or OTPs during the
+            application process. No legitimate employer needs these.
+          </p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">💳</div>
+          <h4>Never Pay Anyone</h4>
+          <p>
+            Real jobs pay YOU — you never pay them. Immediately stop
+            communication with anyone asking for money to give you a job.
+          </p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🌐</div>
+          <h4>Check the Website URL</h4>
+          <p>
+            Use our URL Verification tool to check if a job website is
+            legitimate. Look for HTTPS and check the domain age before trusting
+            it.
+          </p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">👥</div>
+          <h4>Tell Friends & Family</h4>
+          <p>
+            If you find a fake job, warn your contacts. Scammers target multiple
+            people. Sharing awareness can save others from being cheated.
+          </p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📢</div>
+          <h4>Report Suspicious Jobs</h4>
+          <p>
+            Use the Report Job feature on JobDetect to flag suspicious postings.
+            Your report helps protect the entire community from scammers.
+          </p>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="section-title">📋 Red Flag Checklist</div>
+      <div class="checklist-card">
+        <p style="color: #666; margin-bottom: 20px; font-size: 14px">
+          Tick any warning signs you notice in a job posting. If you tick 2 or
+          more — do NOT proceed!
+        </p>
+        <div class="checklist-item">
+          <input type="checkbox" id="c1" onchange="checkCount()" />
+          <label for="c1"
+            ><strong>Money requested</strong> — Registration fee, training fee,
+            or any upfront payment required</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c2" onchange="checkCount()" />
+          <label for="c2"
+            ><strong>Unrealistic salary</strong> — Extremely high pay promised
+            for simple or unskilled work</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c3" onchange="checkCount()" />
+          <label for="c3"
+            ><strong>WhatsApp only</strong> — Job advertised or communicated
+            only through WhatsApp or personal messages</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c4" onchange="checkCount()" />
+          <label for="c4"
+            ><strong>No company details</strong> — No official company name,
+            address, or contact information provided</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c5" onchange="checkCount()" />
+          <label for="c5"
+            ><strong>No interview needed</strong> — Immediate job offer without
+            any interview or screening process</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c6" onchange="checkCount()" />
+          <label for="c6"
+            ><strong>Extreme urgency</strong> — Pressure to apply immediately or
+            lose the opportunity</label
+          >
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="c7" onchange="checkCount()" />
+          <label for="c7"
+            ><strong>Vague job description</strong> — Job requirements are
+            unclear, generic, or copy-pasted</label
+          >
+        </div>
+        <div
+          id="checklistWarning"
+          style="
+            display: none;
+            background: #fee2e2;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 16px;
+            color: #991b1b;
+            font-weight: 600;
+            font-size: 14px;
+          "
+        >
+          ⚠️ You have ticked multiple red flags — this job is likely FAKE! Use
+          our detection tool and report it immediately.
+        </div>
+      </div>
+
+      <!-- Trusted Resources -->
+      <div class="section-title">🌐 Trusted Job Platforms & Resources</div>
+      <div class="resources-grid">
+        <a href="https://www.rozee.pk" target="_blank" class="resource-card">
+          <div class="resource-icon">💼</div>
+          <div>
+            <h4>Rozee.pk</h4>
+            <p>Pakistan's largest verified job portal</p>
+          </div>
+        </a>
+        <a
+          href="https://www.linkedin.com/jobs"
+          target="_blank"
+          class="resource-card"
+        >
+          <div class="resource-icon">🔗</div>
+          <div>
+            <h4>LinkedIn Jobs</h4>
+            <p>Professional network with verified companies</p>
+          </div>
+        </a>
+        <a href="https://www.indeed.com" target="_blank" class="resource-card">
+          <div class="resource-icon">🔍</div>
+          <div>
+            <h4>Indeed.com</h4>
+            <p>Global job platform with user reviews</p>
+          </div>
+        </a>
+        <a
+          href="https://www.fia.gov.pk/cybercrime"
+          target="_blank"
+          class="resource-card"
+        >
+          <div class="resource-icon">🚔</div>
+          <div>
+            <h4>FIA Cybercrime</h4>
+            <p>Report online fraud and job scams officially</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Emergency -->
+      <div class="emergency-box">
+        <h4>🚨 Emergency — Already Been Scammed?</h4>
+        <p>
+          If you have already paid money or shared personal information, act
+          immediately:
+        </p>
+        <div class="hotline">FIA Cybercrime: 0800-02345</div>
+        <p>
+          Contact your bank immediately to block transactions. File a complaint
+          online at <strong>fia.gov.pk</strong>
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <h3>🛡️ Found a Suspicious Job?</h3>
+        <p>
+          Use our AI detection system to verify it instantly, then report it to
+          protect the community
+        </p>
+        <div class="cta-buttons">
+          <a href="detect.html" class="btn-cta-white">🔍 Detect This Job</a>
+          <a href="report.html" class="btn-cta-outline">🚨 Report This Job</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("userName").textContent =
+          localStorage.getItem("userName") || "User";
+        if (!localStorage.getItem("token")) window.location.href = "Login.html";
+      });
+
+      function checkCount() {
+        const checked = document.querySelectorAll(
+          ".checklist-item input:checked",
+        ).length;
+        document.getElementById("checklistWarning").style.display =
+          checked >= 2 ? "block" : "none";
+      }
+
+      function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("userName");
+          window.location.href = "Login.html";
+        }
+      }
+    </script>
+  </body>
+</html>
