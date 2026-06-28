@@ -1,0 +1,80 @@
+======================================================================
+AI-BASED FAKE JOB DETECTION - TRAINING REPORT
+University of Education - Final Year Project 2026
+======================================================================
+
+MODEL SELECTION:
+----------------------------------------------------------------------
+5 models trained and compared:
+Naive Bayes, Logistic Regression, Decision Tree,
+Random Forest, SVM (Linear)
+
+Random Forest selected as best model
+Reason: Highest accuracy — 97.43%
+
+DATASET INFORMATION:
+----------------------------------------------------------------------
+Dataset File: final_dataset.csv
+Dataset Info: Kaggle + 250 Pakistani Fake + 250 Modern Real
+Original Dataset Size: 16,055
+Used for Training: 15,000
+Real Jobs: 13,634 (84.92%)
+Fake Jobs: 2,421 (15.08%)
+Training Samples: 12,000
+Testing Samples: 3,000
+Feature Dimensions: 1,500
+Class Weight: balanced
+
+======================================================================
+MODEL COMPARISON:
+======================================================================
+              Model Accuracy Precision  Recall F1-Score   Time
+        Naive Bayes   95.50%    99.07%  70.73%   82.54%  0.02s
+Logistic Regression   96.80%    87.37%  92.02%   89.63%  0.24s
+      Decision Tree   95.47%    85.55%  84.04%   84.79%  2.55s
+      Random Forest   97.17%    99.73%  81.37%   89.62%  1.50s
+       SVM (Linear)   15.03%    15.03% 100.00%   26.14% 16.05s
+
+======================================================================
+BEST MODEL: Random Forest
+======================================================================
+Accuracy:  97.17%
+Precision: 99.73%
+Recall:    81.37%  (fake detection rate)
+F1-Score:  89.62%
+Training Time: 1.50 seconds
+
+CONFUSION MATRIX:
+----------------------------------------------------------------------
+                Predicted
+              Real    Fake
+Actual Real   2548       1
+       Fake     84     367
+
+DETAILED METRICS:
+----------------------------------------------------------------------
+TP:   367  Fake jobs correctly identified
+TN:  2548  Real jobs correctly identified
+FP:     1  Real jobs incorrectly flagged
+FN:    84  Fake jobs missed
+
+Sensitivity (Recall): 81.37%
+Specificity:          99.96%
+False Positive Rate:  0.04%
+False Negative Rate:  18.63%
+
+======================================================================
+CLASSIFICATION REPORT:
+======================================================================
+              precision    recall  f1-score   support
+
+    Real Job       0.97      1.00      0.98      2549
+    Fake Job       1.00      0.81      0.90       451
+
+    accuracy                           0.97      3000
+   macro avg       0.98      0.91      0.94      3000
+weighted avg       0.97      0.97      0.97      3000
+
+======================================================================
+Report Generated: 2026-05-04 20:38:45
+======================================================================
