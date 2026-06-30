@@ -1,3 +1,4 @@
+## redeploy trigger v2
 """
 Detection Routes for Fake Job Detection System
 FR2: Text Detection
@@ -6,7 +7,9 @@ FR4: URL Verification
 FR7: Community Reporting
 FR10: Verification History
 FR11: User Feedback & Model Improvement
+
 """
+
 
 import os
 from flask import Blueprint, request, jsonify
